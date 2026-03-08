@@ -8,6 +8,7 @@ import {
 } from '../controllers/projectController';
 import { protect } from '../middleware/authMiddleware';
 import { checkWorkspaceRole } from '../middleware/roleMiddleware';
+import taskRoutes from './taskRoutes';
 
 // Merge params to access workspaceId from parent router
 const router = express.Router({ mergeParams: true });
@@ -19,5 +20,8 @@ router.get('/', checkWorkspaceRole(['Admin', 'Member', 'Guest']), getWorkspacePr
 router.get('/:id', checkWorkspaceRole(['Admin', 'Member', 'Guest']), getProjectDetails);
 router.put('/:id', checkWorkspaceRole(['Admin', 'Member']), updateProject);
 router.delete('/:id', checkWorkspaceRole(['Admin']), deleteProject);
+
+// Re-route to task routes
+router.use('/:projectId/tasks', taskRoutes);
 
 export default router;

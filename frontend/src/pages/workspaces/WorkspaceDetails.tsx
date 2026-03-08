@@ -21,6 +21,7 @@ import toast from 'react-hot-toast';
 import { projectService } from '../../services/projectService';
 import type { Project } from '../../services/projectService';
 import CreateProjectModal from '../../components/workspaces/CreateProjectModal';
+import UserBadge from '../../components/UserBadge';
 
 const WorkspaceDetails: React.FC = () => {
     const { id } = useParams();
@@ -102,10 +103,12 @@ const WorkspaceDetails: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="flex items-center space-x-3">
-                        <button className="p-3 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-all">
+                    <div className="flex items-center space-x-6">
+                        <button className="p-3 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all">
                             <Settings className="h-5 w-5" />
                         </button>
+                        <div className="h-8 w-px bg-gray-100"></div>
+                        <UserBadge />
                     </div>
                 </div>
             </nav>
@@ -150,6 +153,7 @@ const WorkspaceDetails: React.FC = () => {
                                     {projects.map((project) => (
                                         <div
                                             key={project._id}
+                                            onClick={() => navigate(`/workspaces/${id}/projects/${project._id}`)}
                                             className="group p-6 bg-gray-50 rounded-3xl border border-transparent hover:border-indigo-200 hover:bg-white hover:shadow-xl transition-all duration-300 cursor-pointer"
                                         >
                                             <div className="flex items-start justify-between mb-4">

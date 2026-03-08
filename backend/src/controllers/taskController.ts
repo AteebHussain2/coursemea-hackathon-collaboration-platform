@@ -1,0 +1,119 @@
+import { Response } from 'express';
+import { AuthRequest } from '../middleware/authMiddleware';
+import Task from '../models/Task';
+import Project from '../models/Project';
+
+// @desc    Create a new task
+// @route   POST /api/v1/workspaces/:workspaceId/projects/:projectId/tasks
+// @access  Private
+export const createTask = async (req: AuthRequest, res: Response): Promise<void> => {
+    try {
+        const { title, description, priority, dueDate, assignedTo, status } = req.body;
+        const { projectId } = req.params;
+
+        const task = await Task.create({
+            title,
+            description,
+            priority,
+            dueDate,
+            assignedTo,
+            status,
+            projectId: projectId as string,
+            creatorId: req.user?._id as any,
+        });
+
+        res.status(201).json({
+            success: true,
+            message: 'Task created successfully',
+            data: task,
+        });
+    } catch (error: any) {
+        res.status(500).json({ success: false, message: error.message || 'Server Error' });
+    }
+};
+
+// @desc    Get all tasks for a project
+// @route   GET /api/v1/workspaces/:workspaceId/projects/:projectId/tasks
+// @access  Private
+export const getProjectTasks = async (req: AuthRequest, res: Response): Promise<void> => {
+    try {
+        const { projectId } = req.params;
+        const tasks = await Task.find({ projectId: projectId as string }).populate('assignedTo', 'name email avatarUrl');
+
+        res.status(200).json({
+            success: true,
+            data: tasks,
+        });
+    } catch (error: any) {
+        res.status(500).json({ success: false, message: error.message || 'Server Error' });
+    }
+};
+
+// @desc    Get single task details
+// @route   GET /api/v1/workspaces/:workspaceId/projects/:projectId/tasks/:id
+// @access  Private
+export const getTaskDetails = async (req: AuthRequest, res: Response): Promise<void> => {
+    try {
+        const task = await Task.findById(req.params.id as string)
+            .populate('assignedTo', 'name email avatarUrl')
+            .populate('creatorId', 'name email avatarUrl');
+
+        if (!task) {
+            res.status(404).json({ success: false, message: 'Task not found' });
+            return;
+        }
+
+        res.status(200).json({
+            success: true,
+            data: task,
+        });
+    } catch (error: any) {
+        res.status(500).json({ success: false, message: error.message || 'Server Error' });
+    }
+};
+
+// @desc    Update task
+// @route   PUT /api/v1/workspaces/:workspaceId/projects/:projectId/tasks/:id
+// @access  Private
+export const updateTask = async (req: AuthRequest, res: Response): Promise<void> => {
+    try {
+        const task = await Task.findByIdAndUpdate(req.params.id as string, req.body, {
+            new: true,
+            runValidators: true,
+        }).populate('assignedTo', 'name email avatarUrl');
+
+        if (!task) {
+            res.status(404).json({ success: false, message: 'Task not found' });
+            return;
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Task updated successfully',
+            data: task,
+        });
+    } catch (error: any) {
+        res.status(500).json({ success: false, message: error.message || 'Server Error' });
+    }
+};
+
+// @desc    Delete task
+// @route   DELETE /api/v1/workspaces/:workspaceId/projects/:projectId/tasks/:id
+// @access  Private
+export const deleteTask = async (req: AuthRequest, res: Response): Promise<void> => {
+    try {
+        const task = await Task.findByIdAndDelete(req.params.id as string);
+
+        if (!task) {
+            res.status(404).json({ success: false, message: 'Task not found' });
+            return;
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Task deleted successfully',
+        });
+    } catch (error: any) {
+        res.status(500).json({ success: false, message: error.message || 'Server Error' });
+    }
+};

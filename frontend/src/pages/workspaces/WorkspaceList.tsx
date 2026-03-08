@@ -4,6 +4,7 @@ import type { Workspace } from '../../services/workspaceService';
 import { workspaceService } from '../../services/workspaceService';
 import { Plus, Users, ArrowRight, Link as LinkIcon, Briefcase } from 'lucide-react';
 import toast from 'react-hot-toast';
+import UserBadge from '../../components/UserBadge';
 
 const WorkspaceList: React.FC = () => {
     const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
@@ -56,6 +57,9 @@ const WorkspaceList: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto text-right mb-8">
+                <UserBadge />
+            </div>
             <div className="max-w-7xl mx-auto">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-12">
                     <div>

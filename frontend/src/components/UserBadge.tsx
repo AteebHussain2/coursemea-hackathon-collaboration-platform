@@ -1,0 +1,93 @@
+import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { LogOut, User, ChevronDown, Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+
+const UserBadge: React.FC = () => {
+    const { user, logout } = useAuth();
+    const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate();
+
+    if (!user) return null;
+
+    const handleLogout = async () => {
+        try {
+            await logout();
+            toast.success('Signed out successfully');
+            navigate('/login');
+        } catch (error) {
+            toast.error('Failed to sign out');
+        }
+    };
+
+    return (
+        <div className="relative">
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="flex items-center space-x-3 p-2 rounded-2xl hover:bg-gray-100 transition-all active:scale-95 group border border-transparent hover:border-gray-200"
+            >
+                <div className="h-10 w-10 bg-linear-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg shadow-indigo-100 overflow-hidden">
+                    {user.avatarUrl ? (
+                        <img src={user.avatarUrl} alt={user.name} className="h-full w-full object-cover" />
+                    ) : (
+                        <span>{user.name.charAt(0).toUpperCase()}</span>
+                    )}
+                </div>
+                <div className="hidden md:block text-left">
+                    <p className="text-sm font-bold text-gray-900 leading-none">{user.name}</p>
+                    <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest mt-1">Logged In</p>
+                </div>
+                <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {isOpen && (
+                <>
+                    <div
+                        className="fixed inset-0 z-10"
+                        onClick={() => setIsOpen(false)}
+                    ></div>
+                    <div className="absolute right-0 mt-3 w-64 bg-white rounded-3xl shadow-2xl border border-gray-100 py-3 z-20 animate-in fade-in slide-in-from-top-2 duration-200">
+                        <div className="px-6 py-4 border-b border-gray-50 mb-2">
+                            <p className="text-xs text-gray-400 font-black uppercase tracking-widest mb-1">Account</p>
+                            <p className="text-sm font-bold text-gray-900 truncate">{user.email}</p>
+                        </div>
+
+                        <button
+                            onClick={() => {
+                                setIsOpen(false);
+                                toast.error('Profile settings coming soon!');
+                            }}
+                            className="w-full flex items-center space-x-3 px-6 py-3 text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
+                        >
+                            <User className="h-4 w-4" />
+                            <span className="text-sm font-bold">Profile Settings</span>
+                        </button>
+
+                        <div className="px-4 mt-2 mb-2">
+                            <div className="bg-linear-to-r from-indigo-50 to-purple-50 rounded-2xl p-4 flex items-center space-x-3 border border-indigo-100/50">
+                                <Sparkles className="h-5 w-5 text-indigo-500" />
+                                <div>
+                                    <p className="text-[10px] font-black text-indigo-600 uppercase tracking-widest leading-none mb-1">Pro Plan</p>
+                                    <p className="text-[8px] text-indigo-400 font-bold leading-none">Trial active for 14 days</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="border-t border-gray-50 mt-2 pt-2 px-2">
+                            <button
+                                onClick={handleLogout}
+                                className="w-full flex items-center space-x-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-2xl transition-colors"
+                            >
+                                <LogOut className="h-4 w-4" />
+                                <span className="text-sm font-bold">Sign Out</span>
+                            </button>
+                        </div>
+                    </div>
+                </>
+            )}
+        </div>
+    );
+};
+
+export default UserBadge;
