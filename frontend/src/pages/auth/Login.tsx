@@ -26,7 +26,7 @@ const Login = () => {
             login(userData as User, token);
 
             toast.success('Welcome back!');
-            navigate('/dashboard');
+            navigate('/workspaces');
         } catch (err: any) {
             toast.error(err.response?.data?.message || 'Failed to login');
         } finally {

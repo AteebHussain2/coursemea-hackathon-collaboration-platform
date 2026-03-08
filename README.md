@@ -107,7 +107,7 @@ Collaboration Platform/
 
 ## 👥 Team
 
-See [`Day-1/team-roles.md`](./Day-1/team-roles.md) for team formation and role assignments.
+See [`docs/team-roles.md`](./docs/team-roles.md) for team formation and role assignments.
 
 ---
 

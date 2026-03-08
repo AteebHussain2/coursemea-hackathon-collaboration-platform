@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import corsOptions from './config/cors';
 import authRoutes from './routes/authRoutes';
+import workspaceRoutes from './routes/workspaceRoutes';
+import userRoutes from './routes/userRoutes';
 
 // Load env vars
 dotenv.config();
@@ -18,6 +20,8 @@ app.use(cookieParser());
 
 // Routes
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/workspaces', workspaceRoutes);
+app.use('/api/v1/users', userRoutes);
 
 // Default Route
 app.get('/api/v1/health', (req: Request, res: Response) => {

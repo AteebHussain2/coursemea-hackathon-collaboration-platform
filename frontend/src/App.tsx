@@ -6,6 +6,9 @@ import { AuthProvider, useAuth } from './context/AuthContext.tsx';
 // Pages
 import Login from './pages/auth/Login.tsx';
 import Register from './pages/auth/Register.tsx';
+import WorkspaceList from './pages/workspaces/WorkspaceList.tsx';
+import CreateWorkspace from './pages/workspaces/CreateWorkspace.tsx';
+import WorkspaceDetails from './pages/workspaces/WorkspaceDetails.tsx';
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ children }: { children: ReactNode }) => {
@@ -26,13 +29,6 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   return children;
 };
 
-// Placeholder for Dashboard
-const Dashboard = () => (
-  <div className="p-8">
-    <h1 className="text-3xl font-bold">Dashboard Placeholder</h1>
-    <p>Authentication was successful.</p>
-  </div>
-);
 
 const AppRoutes = () => {
   return (
@@ -43,16 +39,32 @@ const AppRoutes = () => {
 
       {/* Protected Routes */}
       <Route
-        path="/dashboard"
+        path="/workspaces"
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <WorkspaceList />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/workspaces/create"
+        element={
+          <ProtectedRoute>
+            <CreateWorkspace />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/workspaces/:id"
+        element={
+          <ProtectedRoute>
+            <WorkspaceDetails />
           </ProtectedRoute>
         }
       />
 
-      {/* Default redirect */}
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      {/* Default redirect to workspaces */}
+      <Route path="*" element={<Navigate to="/workspaces" replace />} />
     </Routes>
   );
 };
