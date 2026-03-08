@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/authMiddleware';
 import Task from '../models/Task';
 import Project from '../models/Project';
+import { logActivity } from './commentController';
 
 // @desc    Create a new task
 // @route   POST /api/v1/workspaces/:workspaceId/projects/:projectId/tasks
@@ -21,6 +22,21 @@ export const createTask = async (req: AuthRequest, res: Response): Promise<void>
             projectId: projectId as string,
             creatorId: req.user?._id as any,
         });
+
+        // Log activity
+        try {
+            const project = await Project.findById(projectId as string);
+            await logActivity(
+                (project?.workspaceId as any).toString(),
+                (req.user?._id as any).toString(),
+                'Created task',
+                (task._id as any).toString(),
+                'Task',
+                title
+            );
+        } catch (e) {
+            console.error('Activity logging failed for task creation');
+        }
 
         res.status(201).json({
             success: true,
@@ -85,6 +101,22 @@ export const updateTask = async (req: AuthRequest, res: Response): Promise<void>
         if (!task) {
             res.status(404).json({ success: false, message: 'Task not found' });
             return;
+        }
+
+        if (req.body.status && task.status !== req.body.status) {
+            try {
+                const project = await Project.findById(req.params.projectId as string);
+                await logActivity(
+                    (project?.workspaceId as any).toString(),
+                    (req.user?._id as any).toString(),
+                    `Moved task to ${req.body.status}`,
+                    (task._id as any).toString(),
+                    'Task',
+                    task.title
+                );
+            } catch (e) {
+                console.error('Activity logging failed for task update');
+            }
         }
 
         res.status(200).json({

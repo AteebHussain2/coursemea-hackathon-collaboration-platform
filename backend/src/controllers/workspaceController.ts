@@ -1,8 +1,10 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { AuthRequest } from '../middleware/authMiddleware';
 import Workspace from '../models/Workspace';
 import WorkspaceMember from '../models/WorkspaceMember';
-import crypto from 'crypto';
+import Activity from '../models/Activity';
+import { logActivity } from './commentController';
+import { generateInviteToken } from '../utils/tokenUtils';
 
 // @desc    Create a new workspace
 // @route   POST /api/v1/workspaces
@@ -18,7 +20,7 @@ export const createWorkspace = async (req: AuthRequest, res: Response): Promise<
         }
 
         // Generate a unique invite token
-        const inviteToken = crypto.randomBytes(16).toString('hex');
+        const inviteToken = generateInviteToken();
 
         // Create workspace
         const workspace = await Workspace.create({
@@ -30,10 +32,20 @@ export const createWorkspace = async (req: AuthRequest, res: Response): Promise<
 
         // Add creator as Admin member
         await WorkspaceMember.create({
-            workspaceId: workspace._id,
-            userId: ownerId,
+            workspaceId: (workspace._id as any).toString(),
+            userId: (req.user?._id as any).toString(),
             role: 'Admin',
         });
+
+        // Log activity
+        await logActivity(
+            (workspace._id as any).toString(),
+            (req.user?._id as any).toString(),
+            'Created workspace',
+            (workspace._id as any).toString(),
+            'Workspace',
+            name
+        );
 
         res.status(201).json({
             success: true,
@@ -132,15 +144,61 @@ export const joinWorkspace = async (req: AuthRequest, res: Response): Promise<vo
         }
 
         await WorkspaceMember.create({
-            workspaceId: workspace._id,
-            userId,
+            workspaceId: (workspace._id as any).toString(),
+            userId: (req.user?._id as any).toString(),
             role: 'Member',
         });
+
+        // Log activity
+        await logActivity(
+            (workspace._id as any).toString(),
+            (req.user?._id as any).toString(),
+            'Joined workspace',
+            (workspace._id as any).toString(),
+            'Workspace'
+        );
 
         res.status(200).json({
             success: true,
             message: `Joined ${workspace.name} successfully`,
             data: workspace,
+        });
+    } catch (error: any) {
+        res.status(500).json({ success: false, message: error.message || 'Server Error' });
+    }
+};
+
+// @desc    Remove member from workspace
+// @route   DELETE /api/v1/workspaces/:id/members/:userId
+// @access  Private (Admin only)
+export const removeMember = async (req: AuthRequest, res: Response): Promise<void> => {
+    try {
+        const { id, userId } = req.params;
+
+        await WorkspaceMember.findOneAndDelete({ workspaceId: id, userId });
+
+        res.status(200).json({
+            success: true,
+            message: 'Member removed from workspace',
+        });
+    } catch (error: any) {
+        res.status(500).json({ success: false, message: error.message || 'Server Error' });
+    }
+};
+
+// @desc    Get activity logs for a workspace
+// @route   GET /api/v1/workspaces/:id/activity
+// @access  Private
+export const getWorkspaceActivity = async (req: AuthRequest, res: Response): Promise<void> => {
+    try {
+        const activity = await Activity.find({ workspaceId: req.params.id as any })
+            .populate('userId', 'name avatarUrl')
+            .sort({ createdAt: -1 })
+            .limit(20);
+
+        res.status(200).json({
+            success: true,
+            data: activity,
         });
     } catch (error: any) {
         res.status(500).json({ success: false, message: error.message || 'Server Error' });

@@ -8,6 +8,7 @@ import {
 } from '../controllers/taskController';
 import { protect } from '../middleware/authMiddleware';
 import { checkWorkspaceRole } from '../middleware/roleMiddleware';
+import commentRoutes from './commentRoutes';
 
 const router = express.Router({ mergeParams: true });
 
@@ -20,5 +21,8 @@ router.get('/', checkWorkspaceRole(['Admin', 'Member', 'Guest']), getProjectTask
 router.get('/:id', checkWorkspaceRole(['Admin', 'Member', 'Guest']), getTaskDetails);
 router.put('/:id', checkWorkspaceRole(['Admin', 'Member']), updateTask);
 router.delete('/:id', checkWorkspaceRole(['Admin']), deleteTask);
+
+// Re-route to comment routes
+router.use('/:taskId/comments', commentRoutes);
 
 export default router;

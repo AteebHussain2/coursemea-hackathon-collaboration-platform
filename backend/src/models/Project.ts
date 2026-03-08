@@ -6,6 +6,7 @@ export interface IProject extends Document {
     description: string;
     status: 'Active' | 'On Hold' | 'Completed' | 'Archived';
     deadline: Date;
+    creatorId: mongoose.Types.ObjectId;
     members: mongoose.Types.ObjectId[];
 }
 
@@ -34,6 +35,11 @@ const projectSchema = new Schema<IProject>(
         },
         deadline: {
             type: Date,
+        },
+        creatorId: {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
         },
         members: [
             {

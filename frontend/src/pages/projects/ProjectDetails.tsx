@@ -16,6 +16,7 @@ import { workspaceService } from '../../services/workspaceService';
 import type { WorkspaceDetailsResponse } from '../../services/workspaceService';
 import toast from 'react-hot-toast';
 import CreateTaskModal from '../../components/projects/CreateTaskModal';
+import TaskDetailModal from '../../components/projects/TaskDetailModal';
 import UserBadge from '../../components/UserBadge';
 
 const ProjectDetails: React.FC = () => {
@@ -25,6 +26,8 @@ const ProjectDetails: React.FC = () => {
     const [workspace, setWorkspace] = useState<WorkspaceDetailsResponse | null>(null);
     const [loading, setLoading] = useState(true);
     const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+    const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
     const [activeStatus, setActiveStatus] = useState('Todo');
     const navigate = useNavigate();
 
@@ -59,6 +62,11 @@ const ProjectDetails: React.FC = () => {
     const handleAddTask = (status: string) => {
         setActiveStatus(status);
         setIsTaskModalOpen(true);
+    };
+
+    const handleOpenDetail = (taskId: string) => {
+        setSelectedTaskId(taskId);
+        setIsDetailModalOpen(true);
     };
 
     if (loading) {
@@ -127,7 +135,8 @@ const ProjectDetails: React.FC = () => {
                                 {tasks.filter(t => t.status === status).map((task) => (
                                     <div
                                         key={task._id}
-                                        className="group bg-white p-5 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-indigo-100 transition-all duration-300"
+                                        onClick={() => handleOpenDetail(task._id)}
+                                        className="group bg-white p-5 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-indigo-100 transition-all duration-300 cursor-pointer"
                                     >
                                         <div className="flex items-start justify-between mb-3">
                                             <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-tighter ${task.priority === 'High' ? 'bg-red-50 text-red-600' :
@@ -193,6 +202,17 @@ const ProjectDetails: React.FC = () => {
                     onClose={() => setIsTaskModalOpen(false)}
                     onSuccess={fetchData}
                     members={workspace.members}
+                />
+            )}
+
+            {selectedTaskId && (
+                <TaskDetailModal
+                    workspaceId={workspaceId!}
+                    projectId={projectId!}
+                    taskId={selectedTaskId}
+                    isOpen={isDetailModalOpen}
+                    onClose={() => setIsDetailModalOpen(false)}
+                    onStatusChange={fetchData}
                 />
             )}
         </div>

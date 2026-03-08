@@ -5,6 +5,8 @@ import {
     getWorkspaceDetails,
     updateWorkspace,
     joinWorkspace,
+    removeMember,
+    getWorkspaceActivity,
 } from '../controllers/workspaceController';
 import { protect } from '../middleware/authMiddleware';
 import { checkWorkspaceRole } from '../middleware/roleMiddleware';
@@ -19,6 +21,8 @@ router.post('/', createWorkspace);
 router.get('/', getMyWorkspaces);
 router.post('/join/:token', joinWorkspace);
 
+router.delete('/:id/members/:userId', checkWorkspaceRole(['Admin']), removeMember);
+router.get('/:id/activity', checkWorkspaceRole(['Admin', 'Member', 'Guest']), getWorkspaceActivity);
 router.get('/:id', checkWorkspaceRole(['Admin', 'Member', 'Guest']), getWorkspaceDetails);
 router.put('/:id', checkWorkspaceRole(['Admin']), updateWorkspace);
 

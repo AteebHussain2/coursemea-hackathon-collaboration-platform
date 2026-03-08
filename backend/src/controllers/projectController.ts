@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/authMiddleware';
 import Project from '../models/Project';
 import WorkspaceMember from '../models/WorkspaceMember';
+import { logActivity } from './commentController';
 
 // @desc    Create a new project
 // @route   POST /api/v1/workspaces/:workspaceId/projects
@@ -16,8 +17,18 @@ export const createProject = async (req: AuthRequest, res: Response): Promise<vo
             description,
             deadline,
             workspaceId: workspaceId as string,
-            members: [req.user?._id as any], // Creator added as first member
+            creatorId: req.user?._id as any,
         });
+
+        // Log activity
+        await logActivity(
+            workspaceId as string,
+            (req.user?._id as any).toString(),
+            'Created project',
+            (project as any)._id.toString(),
+            'Project',
+            name
+        );
 
         res.status(201).json({
             success: true,

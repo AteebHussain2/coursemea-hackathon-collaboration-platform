@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import type { WorkspaceDetailsResponse } from '../../services/workspaceService';
 import { workspaceService } from '../../services/workspaceService';
+import { activityService } from '../../services/activityService';
+import type { Activity } from '../../services/activityService';
 import {
     Layout,
     Users,
@@ -27,6 +29,7 @@ const WorkspaceDetails: React.FC = () => {
     const { id } = useParams();
     const [data, setData] = useState<WorkspaceDetailsResponse | null>(null);
     const [projects, setProjects] = useState<Project[]>([]);
+    const [activities, setActivities] = useState<Activity[]>([]);
     const [loading, setLoading] = useState(true);
     const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
     const [copied, setCopied] = useState(false);
@@ -34,7 +37,7 @@ const WorkspaceDetails: React.FC = () => {
 
     useEffect(() => {
         if (id) {
-            fetchDetails();
+            fetchData();
             fetchProjects();
         }
     }, [id]);
@@ -50,12 +53,16 @@ const WorkspaceDetails: React.FC = () => {
         }
     };
 
-    const fetchDetails = async () => {
+    const fetchData = async () => {
         try {
-            const res = await workspaceService.getWorkspaceDetails(id!);
-            if (res.success) {
-                setData(res.data);
-            }
+            setLoading(true);
+            const [wsRes, actRes] = await Promise.all([
+                workspaceService.getWorkspaceDetails(id!),
+                activityService.getWorkspaceActivity(id!)
+            ]);
+
+            if (wsRes.success) setData(wsRes.data);
+            if (actRes.success) setActivities(actRes.data);
         } catch (error: any) {
             toast.error(error.response?.data?.message || 'Failed to load workspace details');
             navigate('/workspaces');
@@ -195,23 +202,32 @@ const WorkspaceDetails: React.FC = () => {
                                 Recent Activity
                             </h2>
                             <div className="space-y-6">
-                                {data.members.slice(0, 3).map((member) => (
-                                    <div key={member._id} className="flex items-start space-x-4">
-                                        <div className="h-10 w-10 bg-gray-100 rounded-full shrink-0 flex items-center justify-center border-2 border-white shadow-sm overflow-hidden">
-                                            {member.userId.avatarUrl ? (
-                                                <img src={member.userId.avatarUrl} alt={member.userId.name} />
-                                            ) : (
-                                                <span className="text-xs font-bold text-gray-400">{member.userId.name.charAt(0)}</span>
-                                            )}
-                                        </div>
-                                        <div>
-                                            <p className="text-sm text-gray-900">
-                                                <span className="font-bold">{member.userId.name}</span> joined the workspace
-                                            </p>
-                                            <p className="text-xs text-gray-400 mt-0.5">{new Date(member.joinedAt).toLocaleDateString()}</p>
-                                        </div>
+                                {activities.length === 0 ? (
+                                    <div className="text-center py-10 opacity-30 italic text-sm text-gray-400">
+                                        No recent activity yet.
                                     </div>
-                                ))}
+                                ) : (
+                                    activities.map((activity) => (
+                                        <div key={activity._id} className="flex items-start space-x-4 group">
+                                            <div className="h-10 w-10 bg-gray-100 rounded-full shrink-0 flex items-center justify-center border-2 border-white shadow-sm overflow-hidden ring-2 ring-transparent group-hover:ring-indigo-100 transition-all">
+                                                {activity.userId.avatarUrl ? (
+                                                    <img src={activity.userId.avatarUrl} alt={activity.userId.name} className="h-full w-full object-cover" />
+                                                ) : (
+                                                    <span className="text-xs font-bold text-gray-400">{activity.userId.name.charAt(0)}</span>
+                                                )}
+                                            </div>
+                                            <div className="min-w-0 flex-1">
+                                                <p className="text-sm text-gray-900 leading-tight">
+                                                    <span className="font-bold">{activity.userId.name}</span> {activity.action.toLowerCase()}
+                                                    {activity.details && <span className="text-indigo-600 font-medium italic"> "{activity.details}"</span>}
+                                                </p>
+                                                <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-black">
+                                                    {new Date(activity.createdAt).toLocaleDateString()} • {activity.entityType}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
                             </div>
                         </div>
                     </div>
