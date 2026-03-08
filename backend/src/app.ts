@@ -1,6 +1,9 @@
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+import corsOptions from './config/cors';
+import authRoutes from './routes/authRoutes';
 
 // Load env vars
 dotenv.config();
@@ -8,9 +11,13 @@ dotenv.config();
 export const app: Express = express();
 
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+// Routes
+app.use('/api/v1/auth', authRoutes);
 
 // Default Route
 app.get('/api/v1/health', (req: Request, res: Response) => {
@@ -18,6 +25,6 @@ app.get('/api/v1/health', (req: Request, res: Response) => {
 });
 
 // Fallback for 404
-app.use('*', (req: Request, res: Response) => {
-    res.status(404).json({ success: false, message: 'API Endpoint Not Found' });
-});
+// app.all('(.*)', (req: Request, res: Response) => {
+//     res.status(404).json({ success: false, message: 'API Endpoint Not Found' });
+// });
