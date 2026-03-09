@@ -136,3 +136,35 @@ export const logoutUser = async (req: Request, res: Response): Promise<void> => 
 
     res.status(200).json({ success: true, message: 'Logged out successfully' });
 };
+
+// @desc    Refresh access token
+// @route   POST /api/v1/auth/refresh
+// @access  Public
+export const refreshToken = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const token = req.cookies.refreshToken;
+
+        if (!token) {
+            res.status(401).json({ success: false, message: 'No refresh token' });
+            return;
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET as string) as any;
+        const user = await User.findById(decoded.id);
+
+        if (!user || user.refreshToken !== token) {
+            res.status(401).json({ success: false, message: 'Invalid refresh token' });
+            return;
+        }
+
+        const accessToken = generateAccessToken(user.id);
+        res.status(200).json({
+            success: true,
+            data: {
+                token: accessToken,
+            },
+        });
+    } catch (error: any) {
+        res.status(401).json({ success: false, message: 'Refresh failed' });
+    }
+};

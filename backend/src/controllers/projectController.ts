@@ -84,7 +84,7 @@ export const getProjectDetails = async (req: AuthRequest, res: Response): Promis
 export const updateProject = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
         const project = await Project.findByIdAndUpdate(req.params.id as string, req.body, {
-            new: true,
+            returnDocument: 'after',
             runValidators: true,
         });
 

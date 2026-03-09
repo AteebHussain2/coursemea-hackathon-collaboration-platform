@@ -4,6 +4,8 @@ import type { WorkspaceDetailsResponse } from '../../services/workspaceService';
 import { workspaceService } from '../../services/workspaceService';
 import { activityService } from '../../services/activityService';
 import type { Activity } from '../../services/activityService';
+import { analyticsService } from '../../services/analyticsService';
+import type { WorkspaceStats } from '../../services/analyticsService';
 import {
     Layout,
     Users,
@@ -24,12 +26,14 @@ import { projectService } from '../../services/projectService';
 import type { Project } from '../../services/projectService';
 import CreateProjectModal from '../../components/workspaces/CreateProjectModal';
 import UserBadge from '../../components/UserBadge';
+import NotificationCenter from '../../components/NotificationCenter';
 
 const WorkspaceDetails: React.FC = () => {
     const { id } = useParams();
     const [data, setData] = useState<WorkspaceDetailsResponse | null>(null);
     const [projects, setProjects] = useState<Project[]>([]);
     const [activities, setActivities] = useState<Activity[]>([]);
+    const [stats, setStats] = useState<WorkspaceStats | null>(null);
     const [loading, setLoading] = useState(true);
     const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
     const [copied, setCopied] = useState(false);
@@ -56,13 +60,15 @@ const WorkspaceDetails: React.FC = () => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const [wsRes, actRes] = await Promise.all([
+            const [wsRes, actRes, statsRes] = await Promise.all([
                 workspaceService.getWorkspaceDetails(id!),
-                activityService.getWorkspaceActivity(id!)
+                activityService.getWorkspaceActivity(id!),
+                analyticsService.getWorkspaceStats(id!)
             ]);
 
             if (wsRes.success) setData(wsRes.data);
             if (actRes.success) setActivities(actRes.data);
+            if (statsRes.success) setStats(statsRes.data);
         } catch (error: any) {
             toast.error(error.response?.data?.message || 'Failed to load workspace details');
             navigate('/workspaces');
@@ -119,12 +125,46 @@ const WorkspaceDetails: React.FC = () => {
                             <span>Dashboard</span>
                         </button>
                         <div className="h-8 w-px bg-gray-100"></div>
-                        <UserBadge />
+                        <div className="flex items-center space-x-6">
+                            <NotificationCenter />
+                            <UserBadge />
+                        </div>
                     </div>
                 </div>
             </nav>
 
-            <main className="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+            <main className="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8 space-y-10">
+                {/* Stats Summary Widgets */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="bg-white p-6 rounded-4xl shadow-sm border border-gray-100 flex items-center space-x-4 hover:shadow-md transition-shadow">
+                        <div className="h-12 w-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600">
+                            <Layout className="h-6 w-6" />
+                        </div>
+                        <div>
+                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">Total Projects</p>
+                            <p className="text-2xl font-black text-gray-900">{projects.length}</p>
+                        </div>
+                    </div>
+                    <div className="bg-white p-6 rounded-4xl shadow-sm border border-gray-100 flex items-center space-x-4 hover:shadow-md transition-shadow">
+                        <div className="h-12 w-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600">
+                            <CheckCircle2 className="h-6 w-6" />
+                        </div>
+                        <div>
+                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">Total Tasks</p>
+                            <p className="text-2xl font-black text-gray-900">{stats?.totalTasks || 0}</p>
+                        </div>
+                    </div>
+                    <div className="bg-white p-6 rounded-4xl shadow-sm border border-gray-100 flex items-center space-x-4 hover:shadow-md transition-shadow">
+                        <div className="h-12 w-12 bg-red-50 rounded-2xl flex items-center justify-center text-red-600">
+                            <TrendingUp className="h-6 w-6" />
+                        </div>
+                        <div>
+                            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">Overdue Tasks</p>
+                            <p className="text-2xl font-black text-gray-900">{stats?.overdueCount || 0}</p>
+                        </div>
+                    </div>
+                </div>
+
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                     {/* Left Column: Stats & Projects (Day 8 Placeholder) */}
                     <div className="lg:col-span-2 space-y-10">

@@ -18,6 +18,7 @@ import toast from 'react-hot-toast';
 import CreateTaskModal from '../../components/projects/CreateTaskModal';
 import TaskDetailModal from '../../components/projects/TaskDetailModal';
 import UserBadge from '../../components/UserBadge';
+import NotificationCenter from '../../components/NotificationCenter';
 
 const ProjectDetails: React.FC = () => {
     const { id: workspaceId, projectId } = useParams();
@@ -101,6 +102,7 @@ const ProjectDetails: React.FC = () => {
                         </div>
                     </div>
                     <div className="flex items-center space-x-6">
+                        <NotificationCenter />
                         <UserBadge />
                     </div>
                 </div>

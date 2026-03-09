@@ -108,7 +108,7 @@ export const getWorkspaceDetails = async (req: AuthRequest, res: Response): Prom
 export const updateWorkspace = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
         const workspace = await Workspace.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
+            returnDocument: 'after',
             runValidators: true,
         });
 

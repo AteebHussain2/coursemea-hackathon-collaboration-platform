@@ -40,6 +40,5 @@ const workspaceSchema = new Schema<IWorkspace>(
 
 // Create index for performance
 workspaceSchema.index({ ownerId: 1 });
-workspaceSchema.index({ inviteToken: 1 });
 
 export default mongoose.model<IWorkspace>('Workspace', workspaceSchema);

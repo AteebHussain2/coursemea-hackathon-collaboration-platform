@@ -21,6 +21,7 @@ import type { WorkspaceStats, TeamPerformance } from '../../services/analyticsSe
 import { workspaceService } from '../../services/workspaceService';
 import type { WorkspaceDetailsResponse } from '../../services/workspaceService';
 import UserBadge from '../../components/UserBadge';
+import NotificationCenter from '../../components/NotificationCenter';
 import toast from 'react-hot-toast';
 
 const COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
@@ -91,7 +92,10 @@ const Dashboard: React.FC = () => {
                             </h1>
                         </div>
                     </div>
-                    <UserBadge />
+                    <div className="flex items-center space-x-6">
+                        <NotificationCenter />
+                        <UserBadge />
+                    </div>
                 </div>
             </header>
 

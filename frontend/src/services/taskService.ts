@@ -15,6 +15,11 @@ export interface Task {
         avatarUrl?: string;
     };
     creatorId: string;
+    attachments?: Array<{
+        name: string;
+        url: string;
+        fileType: string;
+    }>;
     createdAt: string;
     updatedAt: string;
 }

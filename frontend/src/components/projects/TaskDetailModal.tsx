@@ -8,12 +8,16 @@ import {
     User,
     Trash2,
     Clock,
-    CheckCircle2
+    CheckCircle2,
+    Paperclip,
+    Download,
+    FileText
 } from 'lucide-react';
 import { commentService } from '../../services/commentService';
 import type { Comment } from '../../services/commentService';
 import { taskService } from '../../services/taskService';
 import type { Task } from '../../services/taskService';
+import { projectService } from '../../services/projectService';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -39,6 +43,7 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
     const [newComment, setNewComment] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [isSending, setIsSending] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
     const { user } = useAuth();
 
     useEffect(() => {
@@ -105,6 +110,27 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
             }
         } catch (error) {
             toast.error('Failed to update status');
+        }
+    };
+
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        try {
+            setIsUploading(true);
+            const res = await projectService.uploadAttachment(workspaceId, projectId, taskId, file);
+            if (res.success) {
+                setTask({
+                    ...task!,
+                    attachments: [...(task?.attachments || []), res.data]
+                });
+                toast.success('File uploaded');
+            }
+        } catch (error) {
+            toast.error('Upload failed');
+        } finally {
+            setIsUploading(false);
         }
     };
 
@@ -210,6 +236,43 @@ const TaskDetailModal: React.FC<TaskDetailModalProps> = ({
                                         </>
                                     ) : (
                                         <div className="text-sm font-bold text-gray-400 italic">Unassigned</div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="pt-8 border-t border-gray-50">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-xs font-black uppercase tracking-widest text-gray-400 flex items-center">
+                                        <Paperclip className="h-3 w-3 mr-2 text-indigo-500" />
+                                        Attachments ({task?.attachments?.length || 0})
+                                    </h3>
+                                    <label className={`cursor-pointer text-[10px] font-black uppercase tracking-widest text-indigo-600 hover:text-indigo-700 transition-colors ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                                        {isUploading ? 'Uploading...' : '+ Upload File'}
+                                        <input type="file" className="hidden" onChange={handleFileUpload} disabled={isUploading} />
+                                    </label>
+                                </div>
+                                <div className="space-y-2">
+                                    {task?.attachments && task.attachments.length > 0 ? (
+                                        task.attachments.map((file: any, idx: number) => (
+                                            <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-2xl group hover:bg-gray-100 transition-all">
+                                                <div className="flex items-center space-x-3 overflow-hidden">
+                                                    <FileText className="h-4 w-4 text-gray-400 shrink-0" />
+                                                    <span className="text-xs font-bold text-gray-900 truncate">{file.name}</span>
+                                                </div>
+                                                <a
+                                                    href={`${import.meta.env.VITE_API_URL?.replace('/api/v1', '')}${file.url}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="p-1.5 bg-white rounded-lg shadow-sm text-gray-400 hover:text-indigo-600 opacity-0 group-hover:opacity-100 transition-all"
+                                                >
+                                                    <Download className="h-3 w-3" />
+                                                </a>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="text-center py-4 text-xs text-gray-400 italic bg-gray-50/50 rounded-2xl">
+                                            No attachments yet.
+                                        </div>
                                     )}
                                 </div>
                             </div>

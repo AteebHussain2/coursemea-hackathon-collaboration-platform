@@ -9,6 +9,11 @@ export interface ITask extends Document {
     dueDate: Date;
     assignedTo?: mongoose.Types.ObjectId;
     creatorId: mongoose.Types.ObjectId;
+    attachments?: Array<{
+        name: string;
+        url: string;
+        fileType: string;
+    }>;
 }
 
 const taskSchema = new Schema<ITask>(
@@ -51,6 +56,13 @@ const taskSchema = new Schema<ITask>(
             ref: 'User',
             required: true,
         },
+        attachments: [
+            {
+                name: String,
+                url: String,
+                fileType: String,
+            },
+        ],
     },
     { timestamps: true }
 );

@@ -3,6 +3,7 @@ import { AuthRequest } from '../middleware/authMiddleware';
 import Task from '../models/Task';
 import Project from '../models/Project';
 import { logActivity } from './commentController';
+import { createNotification } from './notificationController';
 
 // @desc    Create a new task
 // @route   POST /api/v1/workspaces/:workspaceId/projects/:projectId/tasks
@@ -36,6 +37,17 @@ export const createTask = async (req: AuthRequest, res: Response): Promise<void>
             );
         } catch (e) {
             console.error('Activity logging failed for task creation');
+        }
+
+        // Create notification for assigned user
+        if (assignedTo && assignedTo.toString() !== (req.user?._id as any).toString()) {
+            await createNotification(
+                assignedTo,
+                (req.user?._id as any).toString(),
+                'TaskAssigned',
+                `You have been assigned to task: ${title}`,
+                `/workspaces/${req.params.workspaceId}/projects/${projectId}`
+            );
         }
 
         res.status(201).json({
@@ -94,7 +106,7 @@ export const getTaskDetails = async (req: AuthRequest, res: Response): Promise<v
 export const updateTask = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
         const task = await Task.findByIdAndUpdate(req.params.id as string, req.body, {
-            new: true,
+            returnDocument: 'after',
             runValidators: true,
         }).populate('assignedTo', 'name email avatarUrl');
 
@@ -117,6 +129,17 @@ export const updateTask = async (req: AuthRequest, res: Response): Promise<void>
             } catch (e) {
                 console.error('Activity logging failed for task update');
             }
+        }
+
+        // Create notification for assigned user if it's a new assignment
+        if (req.body.assignedTo && req.body.assignedTo.toString() !== task.assignedTo?.toString()) {
+            await createNotification(
+                req.body.assignedTo,
+                (req.user?._id as any).toString(),
+                'TaskAssigned',
+                `You have been assigned to task: ${task.title}`,
+                `/workspaces/${req.params.workspaceId}/projects/${req.params.projectId}`
+            );
         }
 
         res.status(200).json({
@@ -144,6 +167,41 @@ export const deleteTask = async (req: AuthRequest, res: Response): Promise<void>
         res.status(200).json({
             success: true,
             message: 'Task deleted successfully',
+        });
+    } catch (error: any) {
+        res.status(500).json({ success: false, message: error.message || 'Server Error' });
+    }
+};
+
+// @desc    Upload attachment to task
+// @route   POST /api/v1/workspaces/:workspaceId/projects/:projectId/tasks/:id/attachments
+// @access  Private
+export const uploadAttachment = async (req: AuthRequest, res: Response): Promise<void> => {
+    try {
+        if (!req.file) {
+            res.status(400).json({ success: false, message: 'Please upload a file' });
+            return;
+        }
+
+        const task = await Task.findById(req.params.id);
+        if (!task) {
+            res.status(404).json({ success: false, message: 'Task not found' });
+            return;
+        }
+
+        const attachment = {
+            name: req.file.originalname,
+            url: `/uploads/${req.file.filename}`,
+            fileType: req.file.mimetype,
+        };
+
+        task.attachments?.push(attachment);
+        await task.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Attachment uploaded successfully',
+            data: attachment,
         });
     } catch (error: any) {
         res.status(500).json({ success: false, message: error.message || 'Server Error' });

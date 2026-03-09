@@ -47,5 +47,20 @@ export const projectService = {
     deleteProject: async (workspaceId: string, projectId: string) => {
         const response = await api.delete(`/workspaces/${workspaceId}/projects/${projectId}`);
         return response.data;
-    }
+    },
+
+    uploadAttachment: async (workspaceId: string, projectId: string, taskId: string, file: File) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        const response = await api.post<{ success: boolean; data: any }>(
+            `/workspaces/${workspaceId}/projects/${projectId}/tasks/${taskId}/attachments`,
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            }
+        );
+        return response.data;
+    },
 };

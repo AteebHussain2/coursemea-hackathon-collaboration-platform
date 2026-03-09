@@ -6,6 +6,7 @@ import corsOptions from './config/cors';
 import authRoutes from './routes/authRoutes';
 import workspaceRoutes from './routes/workspaceRoutes';
 import userRoutes from './routes/userRoutes';
+import notificationRoutes from './routes/notificationRoutes';
 
 // Load env vars
 dotenv.config();
@@ -17,11 +18,13 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use('/uploads', express.static('uploads'));
 
 // Routes
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/workspaces', workspaceRoutes);
 app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/notifications', notificationRoutes);
 
 // Default Route
 app.get('/api/v1/health', (req: Request, res: Response) => {
