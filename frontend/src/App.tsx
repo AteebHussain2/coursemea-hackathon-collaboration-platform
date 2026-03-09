@@ -9,6 +9,7 @@ import Register from './pages/auth/Register.tsx';
 import WorkspaceList from './pages/workspaces/WorkspaceList.tsx';
 import CreateWorkspace from './pages/workspaces/CreateWorkspace.tsx';
 import WorkspaceDetails from './pages/workspaces/WorkspaceDetails.tsx';
+import Dashboard from './pages/workspaces/Dashboard.tsx';
 import ProjectDetails from './pages/projects/ProjectDetails.tsx';
 
 // Protected Route Wrapper
@@ -60,6 +61,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <WorkspaceDetails />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/workspaces/:id/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
           </ProtectedRoute>
         }
       />

@@ -7,7 +7,6 @@ import type { Activity } from '../../services/activityService';
 import {
     Layout,
     Users,
-    Settings,
     Plus,
     ArrowLeft,
     Copy,
@@ -16,6 +15,7 @@ import {
     Crown,
     ShieldCheck,
     Sparkles,
+    TrendingUp,
     Calendar as CalendarIcon,
     ChevronRight
 } from 'lucide-react';
@@ -103,16 +103,20 @@ const WorkspaceDetails: React.FC = () => {
                         </button>
                         <div>
                             <div className="flex items-center space-x-3">
-                                <div className="h-10 w-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg shadow-indigo-100">
-                                    {data.workspace.name.charAt(0).toUpperCase()}
+                                <div className="h-10 w-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg shadow-indigo-100 uppercase">
+                                    {data.workspace.name.charAt(0)}
                                 </div>
                                 <h1 className="text-xl font-bold text-gray-900">{data.workspace.name}</h1>
                             </div>
                         </div>
                     </div>
-                    <div className="flex items-center space-x-6">
-                        <button className="p-3 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all">
-                            <Settings className="h-5 w-5" />
+                    <div className="flex items-center space-x-4">
+                        <button
+                            onClick={() => navigate(`/workspaces/${id}/dashboard`)}
+                            className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-200 text-indigo-600 rounded-xl font-bold hover:shadow-md hover:border-indigo-100 transition-all active:scale-95 group"
+                        >
+                            <TrendingUp className="h-4 w-4 group-hover:scale-110 transition-transform" />
+                            <span>Dashboard</span>
                         </button>
                         <div className="h-8 w-px bg-gray-100"></div>
                         <UserBadge />

@@ -11,6 +11,7 @@ import {
 import { protect } from '../middleware/authMiddleware';
 import { checkWorkspaceRole } from '../middleware/roleMiddleware';
 import projectRoutes from './projectRoutes';
+import analyticsRoutes from './analyticsRoutes';
 
 const router = express.Router();
 
@@ -25,6 +26,9 @@ router.delete('/:id/members/:userId', checkWorkspaceRole(['Admin']), removeMembe
 router.get('/:id/activity', checkWorkspaceRole(['Admin', 'Member', 'Guest']), getWorkspaceActivity);
 router.get('/:id', checkWorkspaceRole(['Admin', 'Member', 'Guest']), getWorkspaceDetails);
 router.put('/:id', checkWorkspaceRole(['Admin']), updateWorkspace);
+
+// Re-route to analytics routes
+router.use('/:workspaceId/analytics', analyticsRoutes);
 
 // Re-route to project routes
 router.use('/:workspaceId/projects', projectRoutes);
