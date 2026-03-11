@@ -36,29 +36,29 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen bg-surface-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 transition-colors duration-300">
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
-                <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-content-primary">
+                <h2 className="mt-6 text-center text-4xl font-black tracking-tight text-gray-900 dark:text-white">
                     Create your account
                 </h2>
-                <p className="mt-2 text-center text-sm text-content-secondary">
+                <p className="mt-4 text-center text-sm font-bold text-gray-500 dark:text-gray-400">
                     Already have an account?{' '}
-                    <Link to="/login" className="font-medium text-brand-600 hover:text-brand-500 transition-colors">
+                    <Link to="/login" className="font-black text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 transition-colors underline decoration-2 underline-offset-4">
                         Sign in here
                     </Link>
                 </p>
             </div>
 
-            <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md shadow-sm">
-                <div className="bg-white py-8 px-4 rounded-lg border border-content-muted sm:px-10">
+            <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-md">
+                <div className="bg-white dark:bg-gray-900 py-10 px-6 sm:px-10 rounded-4xl shadow-2xl border border-gray-100 dark:border-gray-800">
                     <form className="space-y-6" onSubmit={handleSubmit}>
                         <div>
-                            <label htmlFor="name" className="block text-sm font-medium text-content-primary">
+                            <label htmlFor="name" className="block text-xs font-black uppercase tracking-widest text-gray-400 mb-2">
                                 Full Name
                             </label>
-                            <div className="mt-1 relative rounded-md shadow-sm">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <UserIcon className="h-5 w-5 text-gray-400" />
+                            <div className="relative group">
+                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <UserIcon className="h-5 w-5 text-gray-400 group-focus-within:text-indigo-500 transition-colors" />
                                 </div>
                                 <input
                                     id="name"
@@ -67,19 +67,19 @@ const Register = () => {
                                     required
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
-                                    className="block w-full pl-10 h-10 border-gray-300 rounded-md focus:ring-brand-500 focus:border-brand-500 sm:text-sm border"
+                                    className="block w-full pl-12 h-14 bg-gray-50 dark:bg-gray-800 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:bg-white dark:focus:bg-gray-800 transition-all font-bold text-gray-900 dark:text-white"
                                     placeholder="John Doe"
                                 />
                             </div>
                         </div>
 
                         <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-content-primary">
+                            <label htmlFor="email" className="block text-xs font-black uppercase tracking-widest text-gray-400 mb-2">
                                 Email address
                             </label>
-                            <div className="mt-1 relative rounded-md shadow-sm">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <Mail className="h-5 w-5 text-gray-400" />
+                            <div className="relative group">
+                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <Mail className="h-5 w-5 text-gray-400 group-focus-within:text-indigo-500 transition-colors" />
                                 </div>
                                 <input
                                     id="email"
@@ -88,19 +88,19 @@ const Register = () => {
                                     required
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="block w-full pl-10 h-10 border-gray-300 rounded-md focus:ring-brand-500 focus:border-brand-500 sm:text-sm border"
+                                    className="block w-full pl-12 h-14 bg-gray-50 dark:bg-gray-800 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:bg-white dark:focus:bg-gray-800 transition-all font-bold text-gray-900 dark:text-white"
                                     placeholder="you@example.com"
                                 />
                             </div>
                         </div>
 
                         <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-content-primary">
+                            <label htmlFor="password" className="block text-xs font-black uppercase tracking-widest text-gray-400 mb-2">
                                 Password
                             </label>
-                            <div className="mt-1 relative rounded-md shadow-sm">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <Lock className="h-5 w-5 text-gray-400" />
+                            <div className="relative group">
+                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <Lock className="h-5 w-5 text-gray-400 group-focus-within:text-indigo-500 transition-colors" />
                                 </div>
                                 <input
                                     id="password"
@@ -109,17 +109,17 @@ const Register = () => {
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="block w-full pl-10 h-10 border-gray-300 rounded-md focus:ring-brand-500 focus:border-brand-500 sm:text-sm border"
+                                    className="block w-full pl-12 h-14 bg-gray-50 dark:bg-gray-800 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:bg-white dark:focus:bg-gray-800 transition-all font-bold text-gray-900 dark:text-white"
                                     placeholder="••••••••"
                                 />
                             </div>
                         </div>
 
-                        <div>
+                        <div className="pt-2">
                             <button
                                 type="submit"
                                 disabled={isLoading}
-                                className="w-full flex justify-center items-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-brand-500 hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-colors disabled:opacity-70"
+                                className="w-full flex justify-center items-center py-4 px-6 border border-transparent rounded-2xl shadow-xl shadow-indigo-100 dark:shadow-none text-sm font-black uppercase tracking-widest text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70"
                             >
                                 {isLoading ? 'Creating account...' : 'Create account'}
                                 {!isLoading && <ArrowRight className="ml-2 h-4 w-4" />}

@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { LogOut, User, ChevronDown, Sparkles } from 'lucide-react';
+import { LogOut, ChevronDown, Sparkles, Settings, Moon, Sun } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import ProfileSettingsModal from './ProfileSettingsModal';
+import { useTheme } from '../context/ThemeContext';
 import toast from 'react-hot-toast';
 
 const UserBadge: React.FC = () => {
     const { user, logout } = useAuth();
+    const { theme, toggleTheme } = useTheme();
     const [isOpen, setIsOpen] = useState(false);
+    const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
     const navigate = useNavigate();
 
     if (!user) return null;
@@ -56,11 +60,11 @@ const UserBadge: React.FC = () => {
                         <button
                             onClick={() => {
                                 setIsOpen(false);
-                                toast.error('Profile settings coming soon!');
+                                setIsProfileModalOpen(true);
                             }}
                             className="w-full flex items-center space-x-3 px-6 py-3 text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
                         >
-                            <User className="h-4 w-4" />
+                            <Settings className="h-4 w-4" />
                             <span className="text-sm font-bold">Profile Settings</span>
                         </button>
 
@@ -74,7 +78,17 @@ const UserBadge: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="border-t border-gray-50 mt-2 pt-2 px-2">
+                        <button
+                            onClick={() => {
+                                toggleTheme();
+                            }}
+                            className="w-full flex items-center space-x-3 px-6 py-3 text-gray-600 dark:text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors"
+                        >
+                            {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+                            <span className="text-sm font-bold">{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
+                        </button>
+
+                        <div className="border-t border-gray-50 dark:border-gray-800 mt-2 pt-2 px-2">
                             <button
                                 onClick={handleLogout}
                                 className="w-full flex items-center space-x-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-2xl transition-colors"
@@ -86,6 +100,11 @@ const UserBadge: React.FC = () => {
                     </div>
                 </>
             )}
+
+            <ProfileSettingsModal
+                isOpen={isProfileModalOpen}
+                onClose={() => setIsProfileModalOpen(false)}
+            />
         </div>
     );
 };

@@ -59,4 +59,16 @@ export const workspaceService = {
         const response = await api.put(`/workspaces/${id}`, data);
         return response.data;
     },
+
+    // Update member role (Admin only)
+    updateMemberRole: async (workspaceId: string, userId: string, role: string) => {
+        const response = await api.put(`/workspaces/${workspaceId}/members/${userId}/role`, { role });
+        return response.data;
+    },
+
+    // Remove member (Admin only)
+    removeMember: async (workspaceId: string, userId: string) => {
+        const response = await api.delete(`/workspaces/${workspaceId}/members/${userId}`);
+        return response.data;
+    },
 };

@@ -168,6 +168,40 @@ export const joinWorkspace = async (req: AuthRequest, res: Response): Promise<vo
     }
 };
 
+// @desc    Update member role in workspace
+// @route   PUT /api/v1/workspaces/:id/members/:userId/role
+// @access  Private (Admin only)
+export const updateMemberRole = async (req: AuthRequest, res: Response): Promise<void> => {
+    try {
+        const { id, userId } = req.params;
+        const { role } = req.body;
+
+        if (!['Admin', 'Member', 'Guest'].includes(role)) {
+            res.status(400).json({ success: false, message: 'Invalid role' });
+            return;
+        }
+
+        const member = await WorkspaceMember.findOneAndUpdate(
+            { workspaceId: id, userId },
+            { role },
+            { returnDocument: 'after' }
+        );
+
+        if (!member) {
+            res.status(404).json({ success: false, message: 'Member not found' });
+            return;
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Member role updated',
+            data: member,
+        });
+    } catch (error: any) {
+        res.status(500).json({ success: false, message: error.message || 'Server Error' });
+    }
+};
+
 // @desc    Remove member from workspace
 // @route   DELETE /api/v1/workspaces/:id/members/:userId
 // @access  Private (Admin only)

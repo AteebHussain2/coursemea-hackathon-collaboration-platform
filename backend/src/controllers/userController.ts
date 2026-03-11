@@ -27,3 +27,32 @@ export const getMe = async (req: AuthRequest, res: Response): Promise<void> => {
         res.status(500).json({ success: false, message: error.message || 'Server Error' });
     }
 };
+
+// @desc    Update user profile
+// @route   PUT /api/v1/users/profile
+// @access  Private
+export const updateProfile = async (req: AuthRequest, res: Response): Promise<void> => {
+    try {
+        const userId = req.user?._id;
+        const { name, bio, avatarUrl } = req.body;
+
+        const user = await User.findByIdAndUpdate(
+            userId,
+            { name, bio, avatarUrl },
+            { returnDocument: 'after', runValidators: true }
+        ).select('-password');
+
+        if (!user) {
+            res.status(404).json({ success: false, message: 'User not found' });
+            return;
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Profile updated successfully',
+            data: user,
+        });
+    } catch (error: any) {
+        res.status(500).json({ success: false, message: error.message || 'Server Error' });
+    }
+};

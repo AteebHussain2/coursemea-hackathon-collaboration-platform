@@ -19,6 +19,7 @@ import CreateTaskModal from '../../components/projects/CreateTaskModal';
 import TaskDetailModal from '../../components/projects/TaskDetailModal';
 import UserBadge from '../../components/UserBadge';
 import NotificationCenter from '../../components/NotificationCenter';
+import GlobalSearch from '../../components/GlobalSearch';
 
 const ProjectDetails: React.FC = () => {
     const { id: workspaceId, projectId } = useParams();
@@ -81,27 +82,28 @@ const ProjectDetails: React.FC = () => {
     if (!project) return null;
 
     return (
-        <div className="min-h-screen bg-gray-50 font-sans">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-950 font-sans transition-colors duration-300">
             {/* Nav */}
-            <nav className="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-10 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-7xl mx-auto h-20 flex items-center justify-between">
-                    <div className="flex items-center">
+            <nav className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 shadow-sm sticky top-0 z-50 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto min-h-20 py-4 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+                    <div className="flex items-center w-full md:w-auto">
                         <button
                             onClick={() => navigate(`/workspaces/${workspaceId}`)}
-                            className="mr-6 p-2 rounded-xl text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all"
+                            className="mr-6 p-2 rounded-xl text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-all"
                         >
                             <ArrowLeft className="h-6 w-6" />
                         </button>
-                        <div>
-                            <div className="flex items-center space-x-2 text-xs text-gray-400 uppercase tracking-widest font-black mb-1">
+                        <div className="min-w-0">
+                            <div className="flex items-center space-x-2 text-[10px] text-gray-400 uppercase tracking-widest font-black mb-1 truncate">
                                 <span>{workspace?.workspace.name}</span>
                                 <ChevronRight className="h-3 w-3" />
                                 <span className="text-indigo-500">Project Details</span>
                             </div>
-                            <h1 className="text-xl font-bold text-gray-900">{project.name}</h1>
+                            <h1 className="text-xl font-black text-gray-900 dark:text-white truncate max-w-[200px] sm:max-w-xs">{project.name}</h1>
                         </div>
                     </div>
-                    <div className="flex items-center space-x-6">
+                    <div className="flex items-center space-x-2 sm:space-x-4">
+                        <GlobalSearch />
                         <NotificationCenter />
                         <UserBadge />
                     </div>
@@ -110,24 +112,24 @@ const ProjectDetails: React.FC = () => {
 
             <main className="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
                 {/* Board */}
-                <div className="flex space-x-6 overflow-x-auto pb-8 scrollbar-hide">
+                <div className="flex space-x-6 overflow-x-auto pb-8 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
                     {statuses.map((status) => (
-                        <div key={status} className="shrink-0 w-80">
+                        <div key={status} className="shrink-0 w-[280px] sm:w-80">
                             <div className="flex items-center justify-between mb-6 px-2">
-                                <div className="flex items-center space-x-2">
-                                    <div className={`h-2 w-2 rounded-full ${status === 'Todo' ? 'bg-gray-400' :
+                                <div className="flex items-center space-x-3">
+                                    <div className={`h-2.5 w-2.5 rounded-full shadow-sm ${status === 'Todo' ? 'bg-gray-400' :
                                         status === 'In Progress' ? 'bg-blue-500' :
                                             status === 'Review' ? 'bg-purple-500' :
                                                 'bg-emerald-500'
                                         }`}></div>
-                                    <h3 className="text-sm font-black uppercase tracking-widest text-gray-600">{status}</h3>
-                                    <span className="bg-gray-200/50 text-gray-500 text-[10px] font-black px-2 py-0.5 rounded-full">
+                                    <h3 className="text-sm font-black uppercase tracking-widest text-gray-600 dark:text-gray-400">{status}</h3>
+                                    <span className="bg-gray-200 dark:bg-gray-800 text-gray-500 dark:text-gray-400 text-[10px] font-black px-2 py-0.5 rounded-full">
                                         {tasks.filter(t => t.status === status).length}
                                     </span>
                                 </div>
                                 <button
                                     onClick={() => handleAddTask(status)}
-                                    className="p-1 hover:bg-gray-100 rounded-lg text-gray-400 hover:text-indigo-600 transition-all"
+                                    className="p-1.5 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all shadow-sm"
                                 >
                                     <Plus className="h-5 w-5" />
                                 </button>
@@ -138,43 +140,43 @@ const ProjectDetails: React.FC = () => {
                                     <div
                                         key={task._id}
                                         onClick={() => handleOpenDetail(task._id)}
-                                        className="group bg-white p-5 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-indigo-100 transition-all duration-300 cursor-pointer"
+                                        className="group bg-white dark:bg-gray-900 p-5 rounded-4xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-2xl hover:border-indigo-100 dark:hover:border-indigo-900/50 transition-all duration-300 cursor-pointer relative overflow-hidden"
                                     >
-                                        <div className="flex items-start justify-between mb-3">
-                                            <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-tighter ${task.priority === 'High' ? 'bg-red-50 text-red-600' :
-                                                task.priority === 'Medium' ? 'bg-amber-50 text-amber-600' :
-                                                    'bg-blue-50 text-blue-600'
+                                        <div className="flex items-start justify-between mb-4">
+                                            <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest shadow-xs ${task.priority === 'High' ? 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400' :
+                                                task.priority === 'Medium' ? 'bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400' :
+                                                    'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
                                                 }`}>
                                                 {task.priority} Priority
                                             </span>
-                                            <button className="text-gray-300 hover:text-gray-600">
+                                            <button className="text-gray-300 dark:text-gray-600 hover:text-gray-600 dark:hover:text-gray-400 transition-colors">
                                                 <MoreVertical className="h-4 w-4" />
                                             </button>
                                         </div>
-                                        <h4 className="font-bold text-gray-900 mb-2 leading-tight group-hover:text-indigo-600 transition-colors">
+                                        <h4 className="font-black text-gray-900 dark:text-white mb-2 leading-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                                             {task.title}
                                         </h4>
-                                        <p className="text-xs text-gray-500 line-clamp-2 mb-4">
+                                        <p className="text-xs text-gray-500 dark:text-gray-400 font-medium line-clamp-2 mb-4 leading-relaxed">
                                             {task.description || 'No description provided.'}
                                         </p>
 
-                                        <div className="flex items-center justify-between pt-4 border-t border-gray-50">
-                                            <div className="flex items-center text-[10px] text-gray-400 font-bold">
-                                                <Calendar className="h-3 w-3 mr-1" />
+                                        <div className="flex items-center justify-between pt-6 border-t border-gray-50 dark:border-gray-800">
+                                            <div className="flex items-center text-[10px] text-gray-400 dark:text-gray-500 font-black uppercase tracking-widest">
+                                                <Calendar className="h-3 w-3 mr-1.5" />
                                                 {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'No date'}
                                             </div>
                                             <div className="flex -space-x-2">
                                                 {task.assignedTo ? (
-                                                    <div className="h-6 w-6 rounded-full bg-indigo-100 border-2 border-white flex items-center justify-center overflow-hidden" title={task.assignedTo.name}>
+                                                    <div className="h-8 w-8 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 border-2 border-white dark:border-gray-900 flex items-center justify-center overflow-hidden shadow-sm" title={task.assignedTo.name}>
                                                         {task.assignedTo.avatarUrl ? (
                                                             <img src={task.assignedTo.avatarUrl} alt={task.assignedTo.name} className="h-full w-full object-cover" />
                                                         ) : (
-                                                            <span className="text-[8px] font-bold text-indigo-600">{task.assignedTo.name.charAt(0)}</span>
+                                                            <span className="text-[10px] font-black text-indigo-600 dark:text-indigo-400">{task.assignedTo.name.charAt(0)}</span>
                                                         )}
                                                     </div>
                                                 ) : (
-                                                    <div className="h-6 w-6 rounded-full bg-gray-50 border-2 border-white flex items-center justify-center text-gray-300">
-                                                        <Users className="h-3 w-3" />
+                                                    <div className="h-8 w-8 rounded-xl bg-gray-50 dark:bg-gray-800 border-2 border-white dark:border-gray-900 flex items-center justify-center text-gray-300 dark:text-gray-600 shadow-sm">
+                                                        <Users className="h-4 w-4" />
                                                     </div>
                                                 )}
                                             </div>
@@ -184,7 +186,7 @@ const ProjectDetails: React.FC = () => {
 
                                 <button
                                     onClick={() => handleAddTask(status)}
-                                    className="w-full py-4 border-2 border-dashed border-gray-100 rounded-3xl text-gray-400 text-xs font-bold hover:border-indigo-200 hover:text-indigo-500 hover:bg-indigo-50 transition-all flex items-center justify-center group"
+                                    className="w-full py-5 border-2 border-dashed border-gray-100 dark:border-gray-800 rounded-4xl text-gray-400 dark:text-gray-500 text-xs font-black uppercase tracking-widest hover:border-indigo-200 dark:hover:border-indigo-500/50 hover:text-indigo-500 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-all flex items-center justify-center group"
                                 >
                                     <Plus className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
                                     Add Task

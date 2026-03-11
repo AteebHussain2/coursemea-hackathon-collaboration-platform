@@ -22,6 +22,7 @@ import { workspaceService } from '../../services/workspaceService';
 import type { WorkspaceDetailsResponse } from '../../services/workspaceService';
 import UserBadge from '../../components/UserBadge';
 import NotificationCenter from '../../components/NotificationCenter';
+import GlobalSearch from '../../components/GlobalSearch';
 import toast from 'react-hot-toast';
 
 const COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
@@ -71,28 +72,29 @@ const Dashboard: React.FC = () => {
     const priorityData = stats?.priorityDistribution.map(p => ({ name: p._id, count: p.count })) || [];
 
     return (
-        <div className="min-h-screen bg-gray-50/50 flex flex-col">
+        <div className="min-h-screen bg-gray-50/50 dark:bg-gray-950 flex flex-col transition-colors duration-300">
             {/* Header */}
-            <header className="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-30 px-8 py-4">
-                <div className="flex items-center justify-between max-w-7xl mx-auto w-full">
-                    <div className="flex items-center space-x-6">
+            <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 sticky top-0 z-50 px-4 sm:px-8 py-4">
+                <div className="flex flex-col sm:flex-row items-center justify-between max-w-7xl mx-auto w-full space-y-4 sm:space-y-0">
+                    <div className="flex items-center space-x-6 w-full sm:w-auto">
                         <button
                             onClick={() => navigate(`/workspaces/${id}`)}
-                            className="p-3 bg-gray-50 hover:bg-gray-100 rounded-2xl transition-all group"
+                            className="p-3 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-2xl transition-all group shadow-sm"
                         >
                             <ArrowLeft className="h-5 w-5 text-gray-400 group-hover:text-indigo-600 transition-colors" />
                         </button>
-                        <div className="space-y-1">
+                        <div className="space-y-1 min-w-0">
                             <div className="flex items-center space-x-3 text-[10px] font-black uppercase tracking-widest text-indigo-500">
                                 <TrendingUp className="h-3 w-3" />
                                 <span>Analytics Hub</span>
                             </div>
-                            <h1 className="text-2xl font-black text-gray-900 leading-tight">
+                            <h1 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white leading-tight truncate">
                                 {workspace?.workspace.name} Dashboard
                             </h1>
                         </div>
                     </div>
-                    <div className="flex items-center space-x-6">
+                    <div className="flex items-center space-x-4 sm:space-x-6">
+                        <GlobalSearch />
                         <NotificationCenter />
                         <UserBadge />
                     </div>
@@ -101,68 +103,68 @@ const Dashboard: React.FC = () => {
 
             <main className="flex-1 p-8 max-w-7xl mx-auto w-full space-y-8">
                 {/* Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 flex flex-col justify-between">
-                        <div className="h-12 w-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="bg-white dark:bg-gray-900 p-8 rounded-4xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col justify-between">
+                        <div className="h-12 w-12 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-6">
                             <Layout className="h-6 w-6" />
                         </div>
                         <div>
                             <p className="text-xs font-black uppercase tracking-widest text-gray-400 mb-1">Total Tasks</p>
-                            <p className="text-4xl font-black text-gray-900">{stats?.totalTasks || 0}</p>
+                            <p className="text-4xl font-black text-gray-900 dark:text-white">{stats?.totalTasks || 0}</p>
                         </div>
                     </div>
 
-                    <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 flex flex-col justify-between">
-                        <div className="h-12 w-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 mb-6">
+                    <div className="bg-white dark:bg-gray-900 p-8 rounded-4xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col justify-between">
+                        <div className="h-12 w-12 bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-6">
                             <CheckCircle2 className="h-6 w-6" />
                         </div>
                         <div>
                             <p className="text-xs font-black uppercase tracking-widest text-gray-400 mb-1">Completed</p>
-                            <p className="text-4xl font-black text-gray-900">
+                            <p className="text-4xl font-black text-gray-900 dark:text-white">
                                 {stats?.statusDistribution.find(s => s._id === 'Done')?.count || 0}
                             </p>
                         </div>
                     </div>
 
-                    <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 flex flex-col justify-between">
-                        <div className="h-12 w-12 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-600 mb-6">
+                    <div className="bg-white dark:bg-gray-900 p-8 rounded-4xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col justify-between">
+                        <div className="h-12 w-12 bg-amber-50 dark:bg-amber-900/20 rounded-2xl flex items-center justify-center text-amber-600 dark:text-amber-400 mb-6">
                             <Clock className="h-6 w-6" />
                         </div>
                         <div>
                             <p className="text-xs font-black uppercase tracking-widest text-gray-400 mb-1">In Progress</p>
-                            <p className="text-4xl font-black text-gray-900">
+                            <p className="text-4xl font-black text-gray-900 dark:text-white">
                                 {stats?.statusDistribution.find(s => s._id === 'In Progress')?.count || 0}
                             </p>
                         </div>
                     </div>
 
-                    <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 flex flex-col justify-between">
-                        <div className="h-12 w-12 bg-red-50 rounded-2xl flex items-center justify-center text-red-600 mb-6">
+                    <div className="bg-white dark:bg-gray-900 p-8 rounded-4xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col justify-between">
+                        <div className="h-12 w-12 bg-red-50 dark:bg-red-900/20 rounded-2xl flex items-center justify-center text-red-600 dark:text-red-400 mb-6">
                             <AlertCircle className="h-6 w-6" />
                         </div>
                         <div>
                             <p className="text-xs font-black uppercase tracking-widest text-gray-400 mb-1">Overdue</p>
-                            <p className="text-4xl font-black text-gray-900">{stats?.overdueCount || 0}</p>
+                            <p className="text-4xl font-black text-gray-900 dark:text-white">{stats?.overdueCount || 0}</p>
                         </div>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Status Distribution */}
-                    <div className="bg-white p-10 rounded-[3rem] shadow-sm border border-gray-100 h-[500px] flex flex-col">
-                        <h3 className="text-sm font-black uppercase tracking-widest text-gray-900 mb-10 flex items-center">
+                    <div className="bg-white dark:bg-gray-900 p-6 sm:p-10 rounded-4xl sm:rounded-[3rem] shadow-sm border border-gray-100 dark:border-gray-800 h-[450px] sm:h-[500px] flex flex-col">
+                        <h3 className="text-sm font-black uppercase tracking-widest text-gray-900 dark:text-white mb-8 sm:mb-10 flex items-center">
                             <PieChartIcon className="h-5 w-5 mr-3 text-indigo-500" />
                             Task Status Breakdown
                         </h3>
-                        <div className="flex-1 w-full">
+                        <div className="flex-1 w-full min-h-0">
                             <ResponsiveContainer width="100%" height="100%">
                                 <PieChart>
                                     <Pie
                                         data={statusData}
                                         cx="50%"
                                         cy="50%"
-                                        innerRadius={100}
-                                        outerRadius={160}
+                                        innerRadius={60}
+                                        outerRadius={100}
                                         paddingAngle={5}
                                         dataKey="value"
                                     >
@@ -171,13 +173,13 @@ const Dashboard: React.FC = () => {
                                         ))}
                                     </Pie>
                                     <Tooltip
-                                        contentStyle={{ borderRadius: '24px', border: 'none', boxShadow: '0 10px 30px rgba(0,0,0,0.05)', fontWeight: 'bold' }}
+                                        contentStyle={{ borderRadius: '24px', border: 'none', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', fontWeight: 'bold', backgroundColor: 'rgba(255,255,255,0.95)' }}
                                     />
                                     <Legend
                                         verticalAlign="bottom"
                                         height={36}
                                         iconType="circle"
-                                        formatter={(value: string) => <span className="text-xs font-bold text-gray-600 ml-2 uppercase tracking-widest">{value}</span>}
+                                        formatter={(value: string) => <span className="text-[10px] sm:text-xs font-bold text-gray-500 dark:text-gray-400 ml-2 uppercase tracking-widest">{value}</span>}
                                     />
                                 </PieChart>
                             </ResponsiveContainer>
@@ -185,30 +187,30 @@ const Dashboard: React.FC = () => {
                     </div>
 
                     {/* Team Leaderboard */}
-                    <div className="bg-white p-10 rounded-[3rem] shadow-sm border border-gray-100 h-[500px] flex flex-col">
-                        <h3 className="text-sm font-black uppercase tracking-widest text-gray-900 mb-10 flex items-center">
+                    <div className="bg-white dark:bg-gray-900 p-6 sm:p-10 rounded-4xl sm:rounded-[3rem] shadow-sm border border-gray-100 dark:border-gray-800 h-[450px] sm:h-[500px] flex flex-col">
+                        <h3 className="text-sm font-black uppercase tracking-widest text-gray-900 dark:text-white mb-8 sm:mb-10 flex items-center">
                             <Users className="h-5 w-5 mr-3 text-indigo-500" />
                             Team Performance
                         </h3>
-                        <div className="flex-1 overflow-y-auto pr-4 custom-scrollbar space-y-6">
+                        <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-6">
                             {performance.map((member, index) => (
                                 <div key={index} className="group">
                                     <div className="flex items-center justify-between mb-3">
                                         <div className="flex items-center space-x-4">
-                                            <div className="h-10 w-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold overflow-hidden shadow-sm">
+                                            <div className="h-10 w-10 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold overflow-hidden shadow-sm border border-gray-100 dark:border-gray-700">
                                                 {member.avatarUrl ? <img src={member.avatarUrl} className="h-full w-full object-cover" /> : member.name.charAt(0)}
                                             </div>
-                                            <div>
-                                                <p className="text-sm font-bold text-gray-900 group-hover:text-indigo-600 transition-colors uppercase tracking-tight">{member.name}</p>
-                                                <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest">{member.completed} / {member.totalAssigned} Tasks</p>
+                                            <div className="min-w-0">
+                                                <p className="text-sm font-black text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors uppercase tracking-tight truncate">{member.name}</p>
+                                                <p className="text-[10px] text-gray-400 dark:text-gray-500 font-black uppercase tracking-widest">{member.completed} / {member.totalAssigned} Tasks</p>
                                             </div>
                                         </div>
-                                        <div className="text-right">
-                                            <p className="text-lg font-black text-gray-900">{member.completionRate}%</p>
-                                            <p className="text-[9px] text-emerald-500 font-black uppercase tracking-widest">Efficiency</p>
+                                        <div className="text-right shrink-0">
+                                            <p className="text-lg font-black text-gray-900 dark:text-white">{member.completionRate}%</p>
+                                            <p className="text-[9px] text-emerald-500 dark:text-emerald-400 font-black uppercase tracking-widest">Efficiency</p>
                                         </div>
                                     </div>
-                                    <div className="h-2 bg-gray-50 rounded-full overflow-hidden">
+                                    <div className="h-2 bg-gray-50 dark:bg-gray-800 rounded-full overflow-hidden">
                                         <div
                                             className="h-full bg-linear-to-r from-indigo-500 to-indigo-600 transition-all duration-1000 shadow-sm"
                                             style={{ width: `${member.completionRate}%` }}
@@ -221,20 +223,20 @@ const Dashboard: React.FC = () => {
                 </div>
 
                 {/* Priority Distribution */}
-                <div className="bg-white p-10 rounded-[3rem] shadow-sm border border-gray-100 h-[400px]">
-                    <h3 className="text-sm font-black uppercase tracking-widest text-gray-900 mb-10 flex items-center">
+                <div className="bg-white dark:bg-gray-900 p-6 sm:p-10 rounded-4xl sm:rounded-[3rem] shadow-sm border border-gray-100 dark:border-gray-800 min-h-[400px]">
+                    <h3 className="text-sm font-black uppercase tracking-widest text-gray-900 dark:text-white mb-10 flex items-center">
                         <BarChartIcon className="h-5 w-5 mr-3 text-indigo-500" />
                         Priority Distribution
                     </h3>
-                    <div className="h-64 w-full">
+                    <div className="h-64 sm:h-[300px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={priorityData}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
+                            <BarChart data={priorityData} margin={{ left: -20, right: 20 }}>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" opacity={0.1} />
                                 <XAxis
                                     dataKey="name"
                                     stroke="#9ca3af"
                                     fontSize={10}
-                                    fontWeight="bold"
+                                    fontWeight="900"
                                     tickLine={false}
                                     axisLine={false}
                                     dy={10}
@@ -242,20 +244,20 @@ const Dashboard: React.FC = () => {
                                 <YAxis
                                     stroke="#9ca3af"
                                     fontSize={10}
-                                    fontWeight="bold"
+                                    fontWeight="900"
                                     tickLine={false}
                                     axisLine={false}
                                     dx={-10}
                                 />
                                 <Tooltip
-                                    cursor={{ fill: '#f8fafc' }}
-                                    contentStyle={{ borderRadius: '24px', border: 'none', boxShadow: '0 10px 30px rgba(0,0,0,0.05)', fontWeight: 'bold' }}
+                                    cursor={{ fill: 'rgba(99, 102, 241, 0.05)' }}
+                                    contentStyle={{ borderRadius: '24px', border: 'none', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', fontWeight: 'bold' }}
                                 />
                                 <Bar
                                     dataKey="count"
                                     fill="#6366f1"
-                                    radius={[10, 10, 0, 0]}
-                                    barSize={60}
+                                    radius={[12, 12, 4, 4]}
+                                    barSize={40}
                                 />
                             </BarChart>
                         </ResponsiveContainer>
