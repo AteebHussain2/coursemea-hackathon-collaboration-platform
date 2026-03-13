@@ -1,7 +1,7 @@
 import axios, { type InternalAxiosRequestConfig, type AxiosResponse, type AxiosError } from 'axios';
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1',
+    baseURL: import.meta.env.VITE_API_URL || 'https://collab-platform-backend-ateeb-hussa.vercel.app/api/v1',
     withCredentials: true, // Important for sending/receiving HttpOnly cookies
 });
 
