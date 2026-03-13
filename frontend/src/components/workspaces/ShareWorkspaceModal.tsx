@@ -29,9 +29,9 @@ const ShareWorkspaceModal: React.FC<ShareWorkspaceModalProps> = ({ isOpen, onClo
                 <div className="p-8 border-b border-gray-50 dark:border-gray-800 flex items-center justify-between bg-linear-to-r from-gray-50 to-white dark:from-gray-800 dark:to-gray-900">
                     <div>
                         <h2 className="text-2xl font-black text-gray-900 dark:text-white leading-none mb-2">Share Workspace</h2>
-                        <p className="text-xs font-black uppercase tracking-widest text-gray-400">Invite others to {workspaceName}</p>
+                        <p className="text-xs font-black uppercase tracking-widest text-gray-400 dark:text-gray-500">Invite others to {workspaceName}</p>
                     </div>
-                    <button onClick={onClose} className="p-3 hover:bg-white dark:hover:bg-gray-800 hover:shadow-md rounded-2xl text-gray-400 transition-all active:scale-95">
+                    <button onClick={onClose} className="p-3 hover:bg-white dark:hover:bg-gray-800 hover:shadow-md rounded-2xl text-gray-400 dark:text-gray-500 transition-all active:scale-95">
                         <X className="h-6 w-6" />
                     </button>
                 </div>

@@ -75,7 +75,7 @@ const WorkspaceList: React.FC = () => {
                     <div className="mt-6 md:mt-0 flex space-x-4">
                         <button
                             onClick={() => setIsJoinModalOpen(true)}
-                            className="inline-flex items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-xl text-gray-700 bg-white hover:bg-gray-50 transition-all active:scale-95"
+                            className="inline-flex items-center px-6 py-3 border border-gray-300 dark:border-gray-700 shadow-sm text-base font-medium rounded-xl text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all active:scale-95"
                         >
                             <LinkIcon className="mr-2 h-5 w-5" />
                             Join Team

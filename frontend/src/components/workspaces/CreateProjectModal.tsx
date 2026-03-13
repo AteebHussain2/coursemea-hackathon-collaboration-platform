@@ -42,7 +42,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ workspaceId, is
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-white rounded-4xl shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in duration-300">
+            <div className="bg-white dark:bg-gray-900 rounded-4xl shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in duration-300 border border-transparent dark:border-gray-800">
                 {/* Header */}
                 <div className="bg-linear-to-br from-indigo-600 to-indigo-700 p-8 text-white relative">
                     <button
@@ -61,7 +61,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ workspaceId, is
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="p-8 space-y-6">
                     <div>
-                        <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
+                        <label className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                             <Layout className="h-4 w-4 mr-2 text-indigo-500" />
                             Project Name
                         </label>
@@ -70,13 +70,13 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ workspaceId, is
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             placeholder="e.g. Website Redesign"
-                            className="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
+                            className="w-full px-5 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                             required
                         />
                     </div>
 
                     <div>
-                        <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
+                        <label className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                             <AlignLeft className="h-4 w-4 mr-2 text-indigo-500" />
                             Description
                         </label>
@@ -85,12 +85,12 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ workspaceId, is
                             onChange={(e) => setDescription(e.target.value)}
                             placeholder="What is this project about?"
                             rows={3}
-                            className="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none resize-none"
+                            className="w-full px-5 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none resize-none text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                         />
                     </div>
 
                     <div>
-                        <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
+                        <label className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                             <Calendar className="h-4 w-4 mr-2 text-indigo-500" />
                             Deadline (Optional)
                         </label>
@@ -98,7 +98,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ workspaceId, is
                             type="date"
                             value={deadline}
                             onChange={(e) => setDeadline(e.target.value)}
-                            className="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
+                            className="w-full px-5 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none text-gray-900 dark:text-white"
                         />
                     </div>
 
@@ -106,14 +106,14 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({ workspaceId, is
                         <button
                             type="button"
                             onClick={onClose}
-                            className="flex-1 px-6 py-4 border border-gray-200 text-gray-700 font-bold rounded-2xl hover:bg-gray-50 transition-all active:scale-95"
+                            className="flex-1 px-6 py-4 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-bold rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all active:scale-95"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="flex-1 px-6 py-4 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 active:scale-95 disabled:opacity-70"
+                            className="flex-1 px-6 py-4 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 dark:shadow-none active:scale-95 disabled:opacity-70"
                         >
                             {isLoading ? 'Creating...' : 'Launch Project'}
                         </button>

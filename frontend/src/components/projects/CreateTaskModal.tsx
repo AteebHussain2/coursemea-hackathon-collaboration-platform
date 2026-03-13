@@ -65,17 +65,17 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in duration-300">
-                <div className="p-8 pb-4 flex items-center justify-between border-b border-gray-50">
-                    <h2 className="text-2xl font-bold text-gray-900">Add New Task</h2>
-                    <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                        <X className="h-6 w-6 text-gray-400" />
+            <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in duration-300 border border-transparent dark:border-gray-800">
+                <div className="p-8 pb-4 flex items-center justify-between border-b border-gray-50 dark:border-gray-800">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Add New Task</h2>
+                    <button onClick={onClose} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors">
+                        <X className="h-6 w-6 text-gray-400 dark:text-gray-500" />
                     </button>
                 </div>
 
                 <form onSubmit={handleSubmit} className="p-8 space-y-6">
                     <div>
-                        <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
+                        <label className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                             <Type className="h-4 w-4 mr-2 text-indigo-500" />
                             Task Title
                         </label>
@@ -84,13 +84,13 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             placeholder="What needs to be done?"
-                            className="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
+                            className="w-full px-5 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                             required
                         />
                     </div>
 
                     <div>
-                        <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
+                        <label className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                             <AlignLeft className="h-4 w-4 mr-2 text-indigo-500" />
                             Description
                         </label>
@@ -99,20 +99,20 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
                             onChange={(e) => setDescription(e.target.value)}
                             placeholder="Add more details..."
                             rows={3}
-                            className="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none resize-none"
+                            className="w-full px-5 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none resize-none text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                         />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
+                            <label className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                 <Flag className="h-4 w-4 mr-2 text-indigo-500" />
                                 Priority
                             </label>
                             <select
                                 value={priority}
                                 onChange={(e) => setPriority(e.target.value as any)}
-                                className="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none appearance-none"
+                                className="w-full px-5 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none appearance-none text-gray-900 dark:text-white"
                             >
                                 <option value="Low">Low</option>
                                 <option value="Medium">Medium</option>
@@ -120,7 +120,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
                             </select>
                         </div>
                         <div>
-                            <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
+                            <label className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                 <Calendar className="h-4 w-4 mr-2 text-indigo-500" />
                                 Due Date
                             </label>
@@ -128,20 +128,20 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
                                 type="date"
                                 value={dueDate}
                                 onChange={(e) => setDueDate(e.target.value)}
-                                className="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
+                                className="w-full px-5 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none text-gray-900 dark:text-white"
                             />
                         </div>
                     </div>
 
                     <div>
-                        <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
+                        <label className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                             <UserPlus className="h-4 w-4 mr-2 text-indigo-500" />
                             Assign To
                         </label>
                         <select
                             value={assignedTo}
                             onChange={(e) => setAssignedTo(e.target.value)}
-                            className="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none appearance-none"
+                            className="w-full px-5 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none appearance-none text-gray-900 dark:text-white"
                         >
                             <option value="">Unassigned</option>
                             {members.map((member) => (
@@ -156,14 +156,14 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
                         <button
                             type="button"
                             onClick={onClose}
-                            className="flex-1 px-6 py-4 border border-gray-100 text-gray-400 font-bold rounded-2xl hover:bg-gray-50 transition-all active:scale-95"
+                            className="flex-1 px-6 py-4 border border-gray-100 dark:border-gray-800 text-gray-400 dark:text-gray-500 font-bold rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all active:scale-95"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="flex-1 px-6 py-4 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 active:scale-95 disabled:opacity-70"
+                            className="flex-1 px-6 py-4 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 dark:shadow-none active:scale-95 disabled:opacity-70"
                         >
                             {isLoading ? 'Creating...' : 'Create Task'}
                         </button>

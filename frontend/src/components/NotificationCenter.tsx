@@ -67,7 +67,7 @@ const NotificationCenter: React.FC = () => {
         <div className="relative" ref={dropdownRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="relative p-2 text-gray-400 hover:text-indigo-600 transition-colors bg-white rounded-xl shadow-sm border border-gray-50"
+                className="relative p-2 text-gray-400 dark:text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-50 dark:border-gray-700"
             >
                 <Bell className="h-5 w-5" />
                 {unreadCount > 0 && (
@@ -78,9 +78,9 @@ const NotificationCenter: React.FC = () => {
             </button>
 
             {isOpen && (
-                <div className="absolute right-0 mt-3 w-80 bg-white rounded-3xl shadow-2xl border border-gray-50 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-                    <div className="p-4 border-b border-gray-50 flex items-center justify-between bg-gray-50/50">
-                        <h3 className="text-xs font-black uppercase tracking-widest text-gray-900">Notifications</h3>
+                <div className="absolute right-0 mt-3 w-80 bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-50 dark:border-gray-800 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="p-4 border-b border-gray-50 dark:border-gray-800 flex items-center justify-between bg-gray-50/50 dark:bg-gray-800/50">
+                        <h3 className="text-xs font-black uppercase tracking-widest text-gray-900 dark:text-white">Notifications</h3>
                         {unreadCount > 0 && (
                             <button
                                 onClick={handleMarkAllAsRead}
@@ -100,10 +100,10 @@ const NotificationCenter: React.FC = () => {
                             notifications.map(notification => (
                                 <div
                                     key={notification._id}
-                                    className={`p-4 border-b border-gray-50 hover:bg-gray-50 transition-colors relative group ${!notification.read ? 'bg-indigo-50/30' : ''}`}
+                                    className={`p-4 border-b border-gray-50 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors relative group ${!notification.read ? 'bg-indigo-50/30 dark:bg-indigo-900/20' : ''}`}
                                 >
                                     <div className="flex items-start space-x-3">
-                                        <div className="h-8 w-8 rounded-full bg-white shadow-sm flex items-center justify-center text-[10px] font-bold text-indigo-600 shrink-0 border border-gray-100 overflow-hidden">
+                                        <div className="h-8 w-8 rounded-full bg-white dark:bg-gray-800 shadow-sm flex items-center justify-center text-[10px] font-bold text-indigo-600 dark:text-indigo-400 shrink-0 border border-gray-100 dark:border-gray-700 overflow-hidden">
                                             {notification.sender.avatarUrl ? (
                                                 <img src={notification.sender.avatarUrl} className="h-full w-full object-cover" />
                                             ) : (
@@ -111,11 +111,11 @@ const NotificationCenter: React.FC = () => {
                                             )}
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <p className="text-xs text-gray-900 leading-relaxed mb-1">
+                                            <p className="text-xs text-gray-900 dark:text-white leading-relaxed mb-1">
                                                 <span className="font-bold">{notification.sender.name}</span> {notification.message}
                                             </p>
                                             <div className="flex items-center justify-between">
-                                                <span className="text-[10px] text-gray-400">{new Date(notification.createdAt).toLocaleDateString()}</span>
+                                                <span className="text-[10px] text-gray-400 dark:text-gray-500">{new Date(notification.createdAt).toLocaleDateString()}</span>
                                                 {notification.link && (
                                                     <Link
                                                         to={notification.link}
@@ -123,7 +123,7 @@ const NotificationCenter: React.FC = () => {
                                                             setIsOpen(false);
                                                             handleMarkAsRead(notification._id);
                                                         }}
-                                                        className="text-[10px] font-black uppercase tracking-widest text-indigo-600 hover:text-indigo-700 flex items-center"
+                                                        className="text-[10px] font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 flex items-center"
                                                     >
                                                         View <ExternalLink className="h-2 w-2 ml-1" />
                                                     </Link>
@@ -133,7 +133,7 @@ const NotificationCenter: React.FC = () => {
                                         {!notification.read && (
                                             <button
                                                 onClick={() => handleMarkAsRead(notification._id)}
-                                                className="absolute right-2 top-2 p-1 bg-white text-indigo-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:text-indigo-600 border border-gray-100 shadow-sm"
+                                                className="absolute right-2 top-2 p-1 bg-white dark:bg-gray-700 text-indigo-400 dark:text-indigo-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:text-indigo-600 dark:hover:text-indigo-300 border border-gray-100 dark:border-gray-600 shadow-sm"
                                             >
                                                 <Check className="h-3 w-3" />
                                             </button>

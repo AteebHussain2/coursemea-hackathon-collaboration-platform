@@ -49,6 +49,33 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .custom-scrollbar-premium::-webkit-scrollbar {
+    height: 10px;
+  }
+
+  .custom-scrollbar-premium::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar-premium::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 20px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+
+  :root.dark .custom-scrollbar-premium::-webkit-scrollbar-thumb {
+    background: #1e293b;
+  }
+
+  .custom-scrollbar-premium::-webkit-scrollbar-thumb:hover {
+    background: #cbd5e1;
+  }
+
+  :root.dark .custom-scrollbar-premium::-webkit-scrollbar-thumb:hover {
+    background: #334155;
   }
 }

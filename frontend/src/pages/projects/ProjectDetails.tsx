@@ -112,7 +112,7 @@ const ProjectDetails: React.FC = () => {
 
             <main className="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
                 {/* Board */}
-                <div className="flex space-x-6 overflow-x-auto pb-8 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
+                <div className="flex space-x-6 overflow-x-auto pb-10 px-4 sm:px-0 -mx-4 sm:mx-0 custom-scrollbar-premium">
                     {statuses.map((status) => (
                         <div key={status} className="shrink-0 w-[280px] sm:w-80">
                             <div className="flex items-center justify-between mb-6 px-2">

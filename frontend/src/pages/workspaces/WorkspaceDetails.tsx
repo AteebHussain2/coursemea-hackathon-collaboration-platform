@@ -128,8 +128,8 @@ const WorkspaceDetails: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+            <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 dark:border-indigo-400"></div>
             </div>
         );
     }
@@ -232,12 +232,12 @@ const WorkspaceDetails: React.FC = () => {
                             </div>
 
                             {projects.length === 0 ? (
-                                <div className="bg-indigo-50/50 rounded-3xl p-10 text-center border border-dashed border-indigo-200">
-                                    <div className="inline-flex items-center justify-center p-4 bg-white rounded-2xl shadow-sm mb-4">
+                                <div className="bg-indigo-50/50 dark:bg-indigo-900/10 rounded-3xl p-10 text-center border border-dashed border-indigo-200 dark:border-indigo-900/50">
+                                    <div className="inline-flex items-center justify-center p-4 bg-white dark:bg-gray-800 rounded-2xl shadow-sm mb-4">
                                         <Sparkles className="h-8 w-8 text-indigo-500" />
                                     </div>
-                                    <h3 className="text-xl font-bold text-indigo-900 mb-2">Kickstart your workspace!</h3>
-                                    <p className="text-indigo-700/70 max-w-sm mx-auto">
+                                    <h3 className="text-xl font-bold text-indigo-900 dark:text-indigo-200 mb-2">Kickstart your workspace!</h3>
+                                    <p className="text-indigo-700/70 dark:text-indigo-400 max-w-sm mx-auto">
                                         No projects found in this workspace. Create one now to start tracking tasks and deadlines.
                                     </p>
                                     <button
@@ -253,10 +253,10 @@ const WorkspaceDetails: React.FC = () => {
                                         <div
                                             key={project._id}
                                             onClick={() => navigate(`/workspaces/${id}/projects/${project._id}`)}
-                                            className="group p-6 bg-gray-50 rounded-3xl border border-transparent hover:border-indigo-200 hover:bg-white hover:shadow-xl transition-all duration-300 cursor-pointer"
+                                            className="group p-6 bg-gray-50 dark:bg-gray-800 rounded-3xl border border-transparent hover:border-indigo-200 dark:hover:border-indigo-900/50 hover:bg-white dark:hover:bg-gray-700 hover:shadow-xl transition-all duration-300 cursor-pointer"
                                         >
                                             <div className="flex items-start justify-between mb-4">
-                                                <div className="p-3 bg-white rounded-2xl shadow-sm group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                                                <div className="p-3 bg-white dark:bg-gray-700 rounded-2xl shadow-sm group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                                                     <Layout className="h-5 w-5" />
                                                 </div>
                                                 <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${project.status === 'Active' ? 'bg-emerald-100 text-emerald-700' :
@@ -266,18 +266,18 @@ const WorkspaceDetails: React.FC = () => {
                                                     {project.status}
                                                 </span>
                                             </div>
-                                            <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors">
+                                            <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                                                 {project.name}
                                             </h3>
                                             <p className="text-sm text-gray-500 line-clamp-2 mb-6">
                                                 {project.description || 'No description provided.'}
                                             </p>
-                                            <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
-                                                <div className="flex items-center text-xs text-gray-400">
+                                            <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100 dark:border-gray-700">
+                                                <div className="flex items-center text-xs text-gray-400 dark:text-gray-500">
                                                     <CalendarIcon className="h-3 w-3 mr-1" />
                                                     {project.deadline ? new Date(project.deadline).toLocaleDateString() : 'No deadline'}
                                                 </div>
-                                                <div className="h-8 w-8 bg-white rounded-full flex items-center justify-center text-gray-300 group-hover:text-indigo-600 group-hover:bg-indigo-50 transition-all">
+                                                <div className="h-8 w-8 bg-white dark:bg-gray-700 rounded-full flex items-center justify-center text-gray-300 dark:text-gray-500 group-hover:text-indigo-600 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-900/30 transition-all">
                                                     <ChevronRight className="h-4 w-4" />
                                                 </div>
                                             </div>
@@ -408,7 +408,10 @@ const WorkspaceDetails: React.FC = () => {
                                     </div>
                                 ))}
                             </div>
-                            <button className="w-full mt-6 py-4 px-6 border border-dashed border-gray-200 dark:border-gray-700 text-gray-400 font-bold rounded-2xl hover:border-indigo-300 hover:text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-all flex items-center justify-center group">
+                            <button
+                                onClick={() => setIsShareModalOpen(true)}
+                                className="w-full mt-6 py-4 px-6 border border-dashed border-gray-200 dark:border-gray-700 text-gray-400 font-bold rounded-2xl hover:border-indigo-300 hover:text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-all flex items-center justify-center group"
+                            >
                                 <Plus className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
                                 Add More
                             </button>

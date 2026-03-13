@@ -2,6 +2,7 @@ import { type ReactNode, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext.tsx';
+import { ThemeProvider } from './context/ThemeContext.tsx';
 
 // Pages - Lazy Loaded
 const Login = lazy(() => import('./pages/auth/Login.tsx'));
@@ -99,8 +100,10 @@ const App = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <AppRoutes />
-        <Toaster position="top-right" />
+        <ThemeProvider>
+          <AppRoutes />
+          <Toaster position="top-right" />
+        </ThemeProvider>
       </AuthProvider>
     </BrowserRouter>
   );
