@@ -1,6 +1,9 @@
+import dotenv from 'dotenv';
+// Load env vars immediately
+dotenv.config();
+
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import corsOptions from './config/cors';
 import authRoutes from './routes/authRoutes';
@@ -8,9 +11,6 @@ import workspaceRoutes from './routes/workspaceRoutes';
 import userRoutes from './routes/userRoutes';
 import notificationRoutes from './routes/notificationRoutes';
 import searchRoutes from './routes/searchRoutes';
-
-// Load env vars
-dotenv.config();
 
 export const app: Express = express();
 
