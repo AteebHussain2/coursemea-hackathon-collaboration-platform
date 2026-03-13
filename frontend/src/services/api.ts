@@ -53,9 +53,14 @@ api.interceptors.response.use(
                     return api(originalRequest);
                 }
             } catch (refreshError) {
+                console.error('[API Interceptor] Token refresh failed', refreshError);
                 // Refresh failed (cookie expired or invalid) -> force logout
                 localStorage.removeItem('accessToken');
-                window.location.href = '/login';
+
+                // Only redirect/reload if NOT already on login/register to avoid infinite loops/reloads
+                if (!window.location.pathname.includes('/login') && !window.location.pathname.includes('/register')) {
+                    window.location.href = '/login';
+                }
                 return Promise.reject(refreshError);
             }
         }

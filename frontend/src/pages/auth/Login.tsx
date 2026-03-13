@@ -20,14 +20,23 @@ const Login = () => {
 
         try {
             setIsLoading(true);
+            console.log('[Login] Attempting login for:', email);
             const res = await api.post('/auth/login', { email, password });
+            console.log('[Login] API Response received:', res.data);
 
             const { token, ...userData } = res.data.data;
+            console.log('[Login] Storing user data and token...');
             login(userData as User, token);
 
             toast.success('Welcome back!');
+            console.log('[Login] Redirection to /workspaces...');
             navigate('/workspaces');
         } catch (err: any) {
+            console.error('[Login] Error caught in handleSubmit:', {
+                message: err.message,
+                response: err.response?.data,
+                status: err.response?.status
+            });
             toast.error(err.response?.data?.message || 'Failed to login');
         } finally {
             setIsLoading(false);

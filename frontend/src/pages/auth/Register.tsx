@@ -21,14 +21,23 @@ const Register = () => {
 
         try {
             setIsLoading(true);
+            console.log('[Register] Attempting registration for:', email);
             const res = await api.post('/auth/register', { name, email, password });
+            console.log('[Register] API Response received:', res.data);
 
             const { token, ...userData } = res.data.data;
+            console.log('[Register] Storing user data and token...');
             login(userData as User, token);
 
             toast.success('Account created successfully!');
+            console.log('[Register] Redirection to /dashboard...');
             navigate('/dashboard');
         } catch (err: any) {
+            console.error('[Register] Error caught in handleSubmit:', {
+                message: err.message,
+                response: err.response?.data,
+                status: err.response?.status
+            });
             toast.error(err.response?.data?.message || 'Failed to create account');
         } finally {
             setIsLoading(false);
