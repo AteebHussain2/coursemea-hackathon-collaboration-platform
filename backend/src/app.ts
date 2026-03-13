@@ -14,6 +14,17 @@ dotenv.config();
 
 export const app: Express = express();
 
+// DB Connection Middleware for Vercel
+import { connectDB } from './config/db';
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Database connection failed' });
+    }
+});
+
 // Middleware
 app.use(cors(corsOptions));
 app.use(express.json());
