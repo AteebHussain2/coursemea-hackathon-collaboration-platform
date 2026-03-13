@@ -12,7 +12,11 @@ router.post('/profile/avatar', protect, upload.single('avatar'), (req: AuthReque
     if (!req.file) {
         return res.status(400).json({ success: false, message: 'Please upload a file' });
     }
-    const avatarUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    
+    // Convert to Base64 for MongoDB storage (via User model)
+    const base64Data = req.file.buffer.toString('base64');
+    const avatarUrl = `data:${req.file.mimetype};base64,${base64Data}`;
+    
     res.status(200).json({ success: true, data: avatarUrl });
 });
 

@@ -1,24 +1,52 @@
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 
 dotenv.config();
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/coursemea_hackathon';
+const MONGO_URI = process.env.MONGO_URI;
 
-let isConnected = false;
+if (!MONGO_URI) {
+    throw new Error("MONGO_URI is not defined in environment variables!");
+}
 
-export const connectDB = async () => {
-    if (isConnected) {
-        return;
+/* eslint-disable no-var */
+declare global {
+    var mongoose: { conn: mongoose.Mongoose | null; promise: Promise<mongoose.Mongoose> | null } | undefined;
+}
+/* eslint-enable no-var */
+
+let cached = global.mongoose;
+
+if (!cached) {
+    cached = global.mongoose = { conn: null, promise: null };
+}
+
+async function connectDB() {
+    if (cached!.conn) {
+        console.log("✅ Using existing MongoDB connection");
+        return cached!.conn;
     }
 
-    try {
-        console.log('Connecting to MongoDB...');
-        await mongoose.connect(MONGO_URI);
-        isConnected = true;
-        console.log('✅ Connected to MongoDB');
-    } catch (error) {
-        console.error('❌ Failed to connect to MongoDB:', error);
-        throw error;
+    if (!cached!.promise) {
+        console.log("🔄 Connecting to MongoDB...");
+        cached!.promise = mongoose
+            .connect(MONGO_URI as string, {
+                dbName: "CollabPlatform",
+                bufferCommands: false,
+            } as mongoose.ConnectOptions)
+            .then((mongoose) => {
+                console.log("✅ MongoDB connected successfully!");
+                return mongoose;
+            })
+            .catch((err) => {
+                console.error("❌ MongoDB connection error:", err);
+                throw err;
+            });
     }
-};
+
+    cached!.conn = await cached!.promise;
+    return cached!.conn;
+}
+
+export { connectDB };
+export default connectDB;

@@ -189,9 +189,10 @@ export const uploadAttachment = async (req: AuthRequest, res: Response): Promise
             return;
         }
 
+        const base64Data = req.file.buffer.toString('base64');
         const attachment = {
             name: req.file.originalname,
-            url: `/uploads/${req.file.filename}`,
+            url: `data:${req.file.mimetype};base64,${base64Data}`,
             fileType: req.file.mimetype,
         };
 
