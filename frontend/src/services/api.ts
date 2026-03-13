@@ -9,6 +9,10 @@ const api = axios.create({
 api.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
         const token = localStorage.getItem('accessToken');
+        console.log(`[API Request] ${config.method?.toUpperCase()} ${config.url}`, {
+            hasToken: !!token,
+            withCredentials: config.withCredentials
+        });
         if (token && config.headers) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -21,6 +25,11 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (response: AxiosResponse) => response,
     async (error: any) => {
+        console.error('[API Error]', {
+            status: error.response?.status,
+            message: error.response?.data?.message || error.message,
+            url: error.config?.url
+        });
         const originalRequest = error.config;
 
         // If error is 401 Unauthorized and we haven't already retried

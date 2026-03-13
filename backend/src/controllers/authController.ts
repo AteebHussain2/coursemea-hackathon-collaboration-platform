@@ -48,8 +48,8 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
             // Send refresh token in HttpOnly cookie
             res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
+                secure: true, // Required for SameSite: 'none'
+                sameSite: 'none', // Required for cross-domain Vercel cookies
                 maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
             });
 
@@ -91,8 +91,8 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 
             res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
+                secure: true,
+                sameSite: 'none',
                 maxAge: 7 * 24 * 60 * 60 * 1000,
             });
 
@@ -131,6 +131,8 @@ export const logoutUser = async (req: Request, res: Response): Promise<void> => 
 
     res.cookie('refreshToken', '', {
         httpOnly: true,
+        secure: true,
+        sameSite: 'none',
         expires: new Date(0),
     });
 

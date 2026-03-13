@@ -14,6 +14,9 @@ dotenv.config();
 
 export const app: Express = express();
 
+// Required for Secure cookies behind Vercel's proxy
+app.set('trust proxy', 1);
+
 // DB Connection Middleware for Vercel
 import { connectDB } from './config/db';
 app.use(async (req, res, next) => {
