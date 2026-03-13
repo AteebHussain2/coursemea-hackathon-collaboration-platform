@@ -27,20 +27,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         const initAuth = async () => {
             const token = localStorage.getItem('accessToken');
-            console.log('[Auth Init] Checking for access token...', { hasToken: !!token });
             if (!token) {
                 setLoading(false);
                 return;
             }
 
             try {
-                console.log('[Auth Init] Fetching user profile...');
                 // The interceptor will handle silent refresh if the token is expired
                 const response = await api.get('/users/me');
-                console.log('[Auth Init] Profile fetched successfully', response.data.data);
                 setUser(response.data.data);
             } catch (error) {
-                console.error('[Auth Init] Failed to initialize session:', error);
+                console.error('Failed to initialize session:', error);
                 localStorage.removeItem('accessToken');
                 setUser(null);
             } finally {
@@ -52,7 +49,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }, []);
 
     const login = (userData: User, token: string) => {
-        console.log('[Auth Context] Logging in user...', userData._id);
         localStorage.setItem('accessToken', token);
         setUser(userData);
     };
